@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:nafi3_project/features/home/home.dart';
+
+import 'package:nafi3_project/features/auth/signup.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -191,7 +194,13 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                   ),
 
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) =>Home()),
+      
+            );
+                  },
 
                   child: const Row(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -274,7 +283,13 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                 ),
 
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => Signupscreen()),
+      
+            );
+                },
 
                 child: const Padding(
                   padding: EdgeInsets.symmetric(

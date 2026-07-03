@@ -11,6 +11,7 @@ class SavedCausesCard extends StatelessWidget {
         vertical: 10,
       ),
       child: Card(
+        color: Colors.white,
         child: Container(
           width: double.infinity,
           padding: const EdgeInsets.all(20),

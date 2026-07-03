@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:nafi3_project/core/utils/app_color.dart';
+import 'package:nafi3_project/core/utils/app_colors.dart';
+import 'package:nafi3_project/core/widget/navbar.dart';
 
 class AddDonationScreen extends StatefulWidget {
   const AddDonationScreen({super.key});
@@ -12,15 +13,15 @@ class _AddDonationScreenState extends State<AddDonationScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+    backgroundColor:AppColors.backgroundColor,
       appBar: AppBar(
-        backgroundColor: Colors.white,
+     backgroundColor:AppColors.backgroundColor,
         title: Text(
           'Nafi3',
           style: TextStyle(
             fontWeight: FontWeight.bold,
             fontSize: 24,
-            color: AppColors.darkgreen,
+            color: AppColors.primaryColor,
           ),
         ),
       ),
@@ -89,12 +90,14 @@ class _AddDonationScreenState extends State<AddDonationScreen> {
           ),
         ),
       ),
+
+      bottomNavigationBar: const Navbar( currentIndex: 1,),
     );
   }
 
   /////////////////Custom Widget//////////////////////////////////////
   ////////////////////////////////////////////////////////////////////
-  appuploadphoto() {
+  GestureDetector appuploadphoto() {
     return GestureDetector(
       onTap: null,
       child: MouseRegion(
@@ -123,7 +126,7 @@ class _AddDonationScreenState extends State<AddDonationScreen> {
     );
   }
 
-  appelevatedbutton() {
+  ElevatedButton appelevatedbutton() {
     return ElevatedButton(
       onPressed: () {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -148,7 +151,7 @@ class _AddDonationScreenState extends State<AddDonationScreen> {
     );
   }
 
-  apptexttittle() {
+  TextFormField apptexttittle() {
     return TextFormField(
       decoration: InputDecoration(
         hintText: "e.g. Warm Winter Coat",
@@ -161,7 +164,7 @@ class _AddDonationScreenState extends State<AddDonationScreen> {
     );
   }
 
-  appdropdown() {
+  DropdownButtonFormField<String> appdropdown() {
     return DropdownButtonFormField<String>(
       decoration: InputDecoration(
         hintText: "Select Category",
@@ -187,7 +190,7 @@ class _AddDonationScreenState extends State<AddDonationScreen> {
     );
   }
 
-  appdescription() {
+  TextFormField appdescription() {
     return TextFormField(
       maxLines: 5,
       decoration: InputDecoration(
@@ -208,7 +211,7 @@ class _AddDonationScreenState extends State<AddDonationScreen> {
     );
   }
 
-  applocationfield() {
+  TextFormField applocationfield() {
     return TextFormField(
       decoration: InputDecoration(
         prefixIcon: Icon(Icons.location_on_outlined),

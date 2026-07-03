@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:nafi3_project/core/utils/app_colors.dart';
 import 'package:nafi3_project/features/auth/login.dart';
 
 void main() {
@@ -14,7 +15,7 @@ class MyApp extends StatelessWidget {
       title: 'Flutter Demo',
       debugShowCheckedModeBanner: false, // لإخفاء شريط الـ Debug الأحمر
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        colorScheme: ColorScheme.fromSeed(seedColor: AppColors.primaryColor),
         useMaterial3: true,
       ),
       home: const LoginScreen(),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:nafi3_project/core/constants/theme/widget/textfield.dart';
+import 'package:nafi3_project/core/widget/textfield.dart';
+import 'package:nafi3_project/features/home/home.dart';
 
 
 class Signupscreen extends StatefulWidget {
@@ -185,9 +186,7 @@ class _SignupscreenState extends State<Signupscreen> {
 
               SizedBox(
                 width: double.infinity,
-                child: AppButton(
-                  buttonname: "Create Account",
-                ),
+                child: appbutton( "Create Account",context),
               ),
 
               const SizedBox(height: 25),
@@ -229,16 +228,7 @@ class _SignupscreenState extends State<Signupscreen> {
 }
 /////////////////////////widgets/////////////////////////
 
-class AppButton extends StatefulWidget {
-  final String buttonname;
-  const AppButton({super.key, required this.buttonname});
-  @override
-  State<AppButton> createState() => _AppButtonState();
-}
-
-class _AppButtonState extends State<AppButton> {
-  @override
-  Widget build(BuildContext context) {
+  Widget appbutton (String buttonname,BuildContext context) {
     return GestureDetector(
       onTap: () {
             Navigator.push(
@@ -254,15 +244,15 @@ class _AppButtonState extends State<AppButton> {
         ),
         height: 50,
         width: 360,
-        child: Center(child: Text(widget.buttonname,style: TextStyle(
+        child: Center(child: Text(buttonname,style: TextStyle(
           color: Colors.white,
         ),),),
       ),
     );
   }
-  }
+  
 
-  Widget terms(isChecked, onChanged) {
+  Widget terms(bool isChecked, onChanged) {
     return Row(
       children: [
         Checkbox(
