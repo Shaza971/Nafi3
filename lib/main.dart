@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:nafi3_project/add_donation/add_donation_screen.dart';
+import 'package:nafi3_project/features/add_donation/add_donation_screen.dart';
+import 'package:nafi3_project/features/favorits/favorit.dart';
 
 void main() {
   runApp(const MyApp());
@@ -20,7 +21,7 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
       ),
       home:
-          const AddDonationScreen(), // يُفضل إضافة const إذا كانت الشاشة تدعم ذلك وتحسين الأداء
+          FavoritesScreen(), // يُفضل إضافة const إذا كانت الشاشة تدعم ذلك وتحسين الأداء
     );
   }
 }
