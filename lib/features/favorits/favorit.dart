@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:nafi3_project/core/utils/app_colors.dart';
+import 'package:nafi3_project/core/widget/navbar.dart';
 
 class FavoritesScreen extends StatefulWidget {
   const FavoritesScreen({super.key});
@@ -57,15 +59,15 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: AppColors.backgroundColor,
 
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: AppColors.backgroundColor,
         elevation: 0,
         title: Text(
           "Nafi3",
           style: TextStyle(
-            color: Colors.green,
+            color: AppColors.primaryColor,
             fontWeight: FontWeight.bold,
             fontSize: 24,
           ),
@@ -73,7 +75,7 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
         actions: [
           Padding(
             padding: EdgeInsets.only(right: 15),
-            child: Icon(Icons.more_vert, color: Colors.green),
+            child: Icon(Icons.more_vert, color: AppColors.primaryColor),
           ),
         ],
       ),
@@ -102,10 +104,11 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
           ],
         ),
       ),
+      bottomNavigationBar: const Navbar(  currentIndex: 2,),
     );
   }
 
-  appfavcont() {
+  Expanded appfavcont() {
     return Expanded(
       child: ListView.builder(
         itemCount: favoriteDonations.length,

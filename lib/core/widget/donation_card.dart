@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:nafi3_project/core/utils/app_colors.dart';
 
 class DonationCard extends StatelessWidget {
   const DonationCard({super.key});
@@ -11,6 +12,7 @@ class DonationCard extends StatelessWidget {
         vertical: 10,
       ),
       child: Card(
+        color: Colors.white,
         child: Container(
           width: double.infinity,
           padding: const EdgeInsets.all(20),
@@ -48,6 +50,7 @@ class DonationCard extends StatelessWidget {
               const LinearProgressIndicator(
                 value: 0.75,
                 minHeight: 8,
+                color: AppColors.primaryColor,
                 borderRadius: BorderRadius.all(
                   Radius.circular(10),
                 ),

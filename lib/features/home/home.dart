@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:nafi3_project/core/utils/app_assets.dart';
 import 'package:nafi3_project/core/utils/app_colors.dart';
+import 'package:nafi3_project/core/widget/navbar.dart';
 
 class Home extends StatelessWidget {
   const Home({super.key});
@@ -8,14 +9,14 @@ class Home extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 247, 249, 247),
+      backgroundColor: AppColors.backgroundColor,
       appBar: AppBar(
-        backgroundColor: const Color.fromARGB(255, 247, 249, 247),
+        backgroundColor:AppColors.backgroundColor,
         title:
           Row(
              mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text("Community Hub",style: TextStyle(color: AppColors.primaryColor),),
+            Text("Nafi3",style: TextStyle(color: AppColors.primaryColor),),
 
            Icon(Icons.notifications_outlined,color: AppColors.primaryColor,)
               ],
@@ -104,7 +105,7 @@ class Home extends StatelessWidget {
           ),
         ),
       ),
-
+      bottomNavigationBar: const Navbar( currentIndex: 0),
     );
   }
 }
@@ -190,7 +191,6 @@ Widget recentCard( String category,String title, String distance,String img,)
     ),
   );
 }
-
 
 Widget categoryCard(String title,IconData icon, {bool isNew = false,})
  {

@@ -11,6 +11,7 @@ class SettingsList extends StatelessWidget {
         vertical: 12,
       ),
       child: Card(
+        color: Colors.white,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(20),
         ),
