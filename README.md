@@ -2,7 +2,7 @@
 ![Dart](https://img.shields.io/badge/Dart-3.x-0175C2?logo=dart)
 ![Firebase](https://img.shields.io/badge/Firebase-Enabled-FFCA28?logo=firebase)
 ![License](https://img.shields.io/badge/License-Educational-green)
-# 🌱 Community Hub
+# 🤝 Community Hub - Donation Mobile Application
 
 Community Hub is a Flutter mobile application that helps people donate useful items to others in their local community.
 
