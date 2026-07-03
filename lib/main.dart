@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:nafi3_project/features/profile/screen/profile_screen.dart';
 import 'package:nafi3_project/features/add_donation/add_donation_screen.dart';
 import 'package:nafi3_project/features/favorits/favorit.dart';
 
@@ -13,15 +14,13 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
-      debugShowCheckedModeBanner:
-          false, // اختياري: لإخفاء شريط الـ Debug الأحمر
+      debugShowCheckedModeBanner: false, // لإخفاء شريط الـ Debug الأحمر
       theme: ThemeData(
-        // تم تصحيح السطر التالي بإضافة ColorScheme قبل .fromSeed
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home:
-          FavoritesScreen(), // يُفضل إضافة const إذا كانت الشاشة تدعم ذلك وتحسين الأداء
+      // تم تحديد شاشة البروفايل كشاشة رئيسية، تقدري تبدليها بـ FavoritesScreen() في أي وقت
+      home: const ProfileScreen(), 
     );
   }
 }
