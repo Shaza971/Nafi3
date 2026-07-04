@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "31891669250",
+    "project_id": "nafi3-fa1e5",
+    "storage_bucket": "nafi3-fa1e5.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:31891669250:android:19c808f3c02d8ab756821b",
+        "android_client_info": {
+          "package_name": "com.example.nafi3_project"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBVKZQK210JU8Sfgv8KFBBVE68ORcyas9I"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
