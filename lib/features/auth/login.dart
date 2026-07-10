@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:nafi3_project/features/home/home.dart';
+import 'package:nafi3_project/features/home/ui/home.dart';
 
 import 'package:nafi3_project/features/auth/signup.dart';
 
@@ -12,7 +12,6 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-
   bool obscure = true;
 
   @override
@@ -25,7 +24,6 @@ class _LoginScreenState extends State<LoginScreen> {
           padding: const EdgeInsets.symmetric(horizontal: 28),
           child: Column(
             children: [
-
               const SizedBox(height: 30),
 
               /// Logo
@@ -48,11 +46,7 @@ class _LoginScreenState extends State<LoginScreen> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: const [
-
-                  Icon(
-                    Icons.groups,
-                    color: Color(0xff2E7D32),
-                  ),
+                  Icon(Icons.groups, color: Color(0xff2E7D32)),
 
                   SizedBox(width: 8),
 
@@ -63,7 +57,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       fontWeight: FontWeight.bold,
                       color: Color(0xff1B5E20),
                     ),
-                  )
+                  ),
                 ],
               ),
 
@@ -71,10 +65,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
               const Text(
                 "Share Kindness",
-                style: TextStyle(
-                  fontSize: 42,
-                  fontWeight: FontWeight.bold,
-                ),
+                style: TextStyle(fontSize: 42, fontWeight: FontWeight.bold),
               ),
 
               const SizedBox(height: 10),
@@ -82,10 +73,7 @@ class _LoginScreenState extends State<LoginScreen> {
               const Text(
                 "Log in to start supporting your local initiatives",
                 textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 18,
-                  color: Colors.grey,
-                ),
+                style: TextStyle(fontSize: 18, color: Colors.grey),
               ),
 
               const SizedBox(height: 45),
@@ -95,10 +83,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 alignment: Alignment.centerLeft,
                 child: Text(
                   "Email Address",
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                  ),
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                 ),
               ),
 
@@ -125,23 +110,15 @@ class _LoginScreenState extends State<LoginScreen> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: const [
-
                   Text(
                     "Password",
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                    ),
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                   ),
 
                   Text(
-                    "Forgot?",
-                    style: TextStyle(
-                      color: Color(0xff2E7D32),
-                      fontSize: 18,
-                    ),
-                  )
-
+                    "Forgot Password?",
+                    style: TextStyle(color: Color(0xff2E7D32), fontSize: 18),
+                  ),
                 ],
               ),
 
@@ -151,7 +128,6 @@ class _LoginScreenState extends State<LoginScreen> {
                 obscureText: obscure,
 
                 decoration: InputDecoration(
-
                   prefixIcon: const Icon(Icons.lock_outline),
 
                   suffixIcon: IconButton(
@@ -184,9 +160,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 width: double.infinity,
                 height: 65,
                 child: ElevatedButton(
-
                   style: ElevatedButton.styleFrom(
-
                     backgroundColor: const Color(0xff2E7D32),
 
                     shape: RoundedRectangleBorder(
@@ -196,31 +170,22 @@ class _LoginScreenState extends State<LoginScreen> {
 
                   onPressed: () {
                     Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) =>Home()),
-      
-            );
+                      context,
+                      MaterialPageRoute(builder: (context) => Home()),
+                    );
                   },
 
                   child: const Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-
                       Text(
                         "Login",
-                        style: TextStyle(
-                          fontSize: 24,
-                          color: Colors.white,
-                        ),
+                        style: TextStyle(fontSize: 24, color: Colors.white),
                       ),
 
                       SizedBox(width: 10),
 
-                      Icon(
-                        Icons.login,
-                        color: Colors.white,
-                      )
-
+                      Icon(Icons.login, color: Colors.white),
                     ],
                   ),
                 ),
@@ -230,21 +195,17 @@ class _LoginScreenState extends State<LoginScreen> {
 
               Row(
                 children: const [
-
                   Expanded(child: Divider()),
 
                   Padding(
                     padding: EdgeInsets.symmetric(horizontal: 10),
                     child: Text(
                       "OR CONTINUE WITH",
-                      style: TextStyle(
-                        color: Colors.grey,
-                      ),
+                      style: TextStyle(color: Colors.grey),
                     ),
                   ),
 
                   Expanded(child: Divider()),
-
                 ],
               ),
 
@@ -252,30 +213,21 @@ class _LoginScreenState extends State<LoginScreen> {
 
               Row(
                 children: [
-
                   Expanded(
-                    child: socialButton(
-                      FontAwesomeIcons.google,
-                      "Google",
-                    ),
+                    child: socialButton(FontAwesomeIcons.google, "Google"),
                   ),
 
                   const SizedBox(width: 20),
 
                   Expanded(
-                    child: socialButton(
-                      FontAwesomeIcons.apple,
-                      "Apple",
-                    ),
+                    child: socialButton(FontAwesomeIcons.apple, "Apple"),
                   ),
-
                 ],
               ),
 
               const SizedBox(height: 40),
 
               OutlinedButton(
-
                 style: OutlinedButton.styleFrom(
                   backgroundColor: Colors.green.shade50,
                   shape: RoundedRectangleBorder(
@@ -285,23 +237,16 @@ class _LoginScreenState extends State<LoginScreen> {
 
                 onPressed: () {
                   Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => Signupscreen()),
-      
-            );
+                    context,
+                    MaterialPageRoute(builder: (context) => Signupscreen()),
+                  );
                 },
 
                 child: const Padding(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: 30,
-                    vertical: 12,
-                  ),
+                  padding: EdgeInsets.symmetric(horizontal: 30, vertical: 12),
                   child: Text(
                     "Create Account",
-                    style: TextStyle(
-                      color: Color(0xff2E7D32),
-                      fontSize: 22,
-                    ),
+                    style: TextStyle(color: Color(0xff2E7D32), fontSize: 22),
                   ),
                 ),
               ),
@@ -311,39 +256,26 @@ class _LoginScreenState extends State<LoginScreen> {
               RichText(
                 textAlign: TextAlign.center,
                 text: const TextSpan(
-                  style: TextStyle(
-                    color: Colors.grey,
-                    fontSize: 18,
-                  ),
+                  style: TextStyle(color: Colors.grey, fontSize: 18),
                   children: [
-
-                    TextSpan(
-                      text: "By continuing, you agree to our ",
-                    ),
+                    TextSpan(text: "By continuing, you agree to our "),
 
                     TextSpan(
                       text: "Terms of Service",
-                      style: TextStyle(
-                        color: Color(0xff2E7D32),
-                      ),
+                      style: TextStyle(color: Color(0xff2E7D32)),
                     ),
 
-                    TextSpan(
-                      text: " and ",
-                    ),
+                    TextSpan(text: " and "),
 
                     TextSpan(
                       text: "Privacy Policy",
-                      style: TextStyle(
-                        color: Color(0xff2E7D32),
-                      ),
+                      style: TextStyle(color: Color(0xff2E7D32)),
                     ),
                   ],
                 ),
               ),
 
               const SizedBox(height: 30),
-
             ],
           ),
         ),
@@ -361,15 +293,11 @@ class _LoginScreenState extends State<LoginScreen> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-
           FaIcon(icon, size: 20),
 
           const SizedBox(width: 10),
 
-          Text(
-            text,
-            style: const TextStyle(fontSize: 18),
-          ),
+          Text(text, style: const TextStyle(fontSize: 18)),
         ],
       ),
     );

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:nafi3_project/core/widget/textfield.dart';
-import 'package:nafi3_project/features/home/home.dart';
+import 'package:nafi3_project/features/home/ui/home.dart';
 
 
 class Signupscreen extends StatefulWidget {
