@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:nafi3_project/core/utils/app_colors.dart';
-import 'package:nafi3_project/features/home/home.dart';
+import 'package:nafi3_project/features/home/ui/home.dart';
 import 'package:nafi3_project/features/add_donation/add_donation_screen.dart';
 import 'package:nafi3_project/features/favorits/favorit.dart';
 import 'package:nafi3_project/features/profile/profile_screen.dart';
@@ -8,10 +8,7 @@ import 'package:nafi3_project/features/profile/profile_screen.dart';
 class Navbar extends StatelessWidget {
   final int currentIndex;
 
-  const Navbar({
-    super.key,
-    required this.currentIndex,
-  });
+  const Navbar({super.key, required this.currentIndex});
 
   @override
   Widget build(BuildContext context) {
@@ -30,30 +27,22 @@ class Navbar extends StatelessWidget {
         if (index == 0) {
           Navigator.pushReplacement(
             context,
-            MaterialPageRoute(
-              builder: (context) => const Home(),
-            ),
+            MaterialPageRoute(builder: (context) => const Home()),
           );
         } else if (index == 1) {
           Navigator.pushReplacement(
             context,
-            MaterialPageRoute(
-              builder: (context) => const AddDonationScreen(),
-            ),
+            MaterialPageRoute(builder: (context) => const AddDonationScreen()),
           );
         } else if (index == 2) {
           Navigator.pushReplacement(
             context,
-            MaterialPageRoute(
-              builder: (context) => const FavoritesScreen(),
-            ),
+            MaterialPageRoute(builder: (context) => const FavoritesScreen()),
           );
         } else if (index == 3) {
           Navigator.pushReplacement(
             context,
-            MaterialPageRoute(
-              builder: (context) => const ProfileScreen(),
-            ),
+            MaterialPageRoute(builder: (context) => const ProfileScreen()),
           );
         }
       },
