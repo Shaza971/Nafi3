@@ -1,7 +1,8 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:nafi3_project/core/widget/textfield.dart';
+import 'package:nafi3_project/features/auth/data/auth_repo.dart';
+import 'package:nafi3_project/features/auth/data/firestore_repo.dart';
 import 'package:nafi3_project/features/home/ui/home.dart';
 
 class Signupscreen extends StatefulWidget {
@@ -12,17 +13,78 @@ class Signupscreen extends StatefulWidget {
 }
 
 class _SignupscreenState extends State<Signupscreen> {
+  final AuthRepo authRepo = AuthRepo();
+  final FirestoreRepo firestoreRepo = FirestoreRepo();
+
+  Future<void> signUp() async {
+    if (!isChecked) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text("Please accept Terms of Service"),
+        ),
+      );
+      return;
+    }
+
+    if (emailController.text.trim().isEmpty ||
+        passwordController.text.trim().isEmpty ||
+        nameController.text.trim().isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text("Please fill all fields"),
+        ),
+      );
+      return;
+    }
+
+    if (passwordController.text != confirmPasswordController.text) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text("Passwords do not match"),
+        ),
+      );
+      return;
+    }
+
+    try {
+     
+      final userCredential = await authRepo.signUp(
+  emailController.text.trim(),
+  passwordController.text.trim(),
+);
+
+await firestoreRepo.saveUser(
+  uid: userCredential.user!.uid,
+  name: nameController.text.trim(),
+  email: emailController.text.trim(),
+);
+
+Navigator.pushReplacement(
+  // ignore: use_build_context_synchronously
+  context,
+  MaterialPageRoute(
+    builder: (_) => Home(),
+  ),
+);
+    } on FirebaseAuthException catch (e) {
+      // ignore: use_build_context_synchronously
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(e.message ?? "Registration Failed"),
+        ),
+      );
+    }
+  }
+
+final TextEditingController nameController = TextEditingController();
+final TextEditingController emailController = TextEditingController();
+final TextEditingController passwordController = TextEditingController();
+final TextEditingController confirmPasswordController =
+    TextEditingController();
   bool isChecked = false;
   bool obscurePassword = true;
   bool obscureConfirmPassword = true;
   bool isLoading = false;
-
-  final TextEditingController nameController = TextEditingController();
-  final TextEditingController emailController = TextEditingController();
-  final TextEditingController passwordController = TextEditingController();
-  final TextEditingController confirmPasswordController =
-      TextEditingController();
-
   @override
   void dispose() {
     nameController.dispose();
@@ -31,72 +93,6 @@ class _SignupscreenState extends State<Signupscreen> {
     confirmPasswordController.dispose();
     super.dispose();
   }
-
-  Future<void> _signUp() async {
-    if (nameController.text.trim().isEmpty ||
-        emailController.text.trim().isEmpty ||
-        passwordController.text.trim().isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Please fill all fields')),
-      );
-      return;
-    }
-
-    if (passwordController.text != confirmPasswordController.text) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Passwords do not match')),
-      );
-      return;
-    }
-
-    if (!isChecked) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Please accept Terms of Service')),
-      );
-      return;
-    }
-
-    setState(() => isLoading = true);
-
-    try {
-      final credential = await FirebaseAuth.instance
-          .createUserWithEmailAndPassword(
-        email: emailController.text.trim(),
-        password: passwordController.text.trim(),
-      );
-
-      await FirebaseFirestore.instance
-          .collection('users')
-          .doc(credential.user!.uid)
-          .set({
-        'name': nameController.text.trim(),
-        'email': emailController.text.trim(),
-        'createdAt': FieldValue.serverTimestamp(),
-      });
-
-      if (!mounted) return;
-
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (_) => const Home()),
-      );
-    } on FirebaseAuthException catch (e) {
-      if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(e.message ?? 'Signup failed')),
-      );
-    } catch (e) {
-      if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Signup failed: $e')),
-      );
-    } finally {
-      if (mounted) {
-        setState(() => isLoading = false);
-      }
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -179,6 +175,7 @@ class _SignupscreenState extends State<Signupscreen> {
                 label: 'Email Address',
                 hint: 'email@example.com',
                 icon: Icons.email_outlined,
+                
               ),
               const SizedBox(height: 20),
               CustomTextField(
@@ -197,6 +194,7 @@ class _SignupscreenState extends State<Signupscreen> {
                     setState(() => obscurePassword = !obscurePassword);
                   },
                 ),
+               
               ),
               const SizedBox(height: 20),
               CustomTextField(
@@ -259,9 +257,18 @@ class _SignupscreenState extends State<Signupscreen> {
     );
   }
 
+
+/////////////////////////widgets/////////////////////////
+
+
+
   Widget appbutton(String buttonname, BuildContext context) {
     return GestureDetector(
-      onTap: isLoading ? null : _signUp,
+
+     onTap: () async {
+  await signUp();
+    },
+
       child: Container(
         decoration: BoxDecoration(
           color: isLoading ? Colors.green.shade300 : Colors.green,
@@ -292,10 +299,10 @@ class _SignupscreenState extends State<Signupscreen> {
     return Row(
       children: [
         Checkbox(
-          value: isChecked,
-          activeColor: Colors.green,
-          onChanged: onChanged,
-        ),
+         value: isChecked,
+         activeColor: Colors.green,
+         onChanged: onChanged,),
+            
         Expanded(
           child: RichText(
             text: const TextSpan(

@@ -1,67 +1,40 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:nafi3_project/core/utils/app_assets.dart';
 import 'package:nafi3_project/core/utils/app_colors.dart';
 import 'package:nafi3_project/core/widget/navbar.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:nafi3_project/features/auth/data/firestore_repo.dart';
+import 'package:nafi3_project/features/home/ui/category_screen.dart';
+import 'package:nafi3_project/features/home/ui/donation_details_screen.dart';
 
 class Home extends StatefulWidget {
-  final String? userName;
-
-  const Home({super.key, this.userName});
+  const Home({super.key});
 
   @override
   State<Home> createState() => _HomeState();
 }
 
 class _HomeState extends State<Home> {
-  final db = FirebaseFirestore.instance;
-  String userName = '';
-  bool isLoadingName = true;
+  final FirestoreRepo firestoreRepo = FirestoreRepo();
+
+  String userName = "";
 
   @override
   void initState() {
     super.initState();
-    if (widget.userName != null && widget.userName!.isNotEmpty) {
-      userName = widget.userName!;
-      isLoadingName = false;
-    } else {
-      loadUserName();
-    }
+    getUserName();
   }
 
-  Future<void> loadUserName() async {
-    try {
-      final uid = FirebaseAuth.instance.currentUser?.uid;
-      if (uid == null) {
-        setState(() {
-          userName = 'Guest';
-          isLoadingName = false;
-        });
-        return;
-      }
+  Future<void> getUserName() async {
+    final user = FirebaseAuth.instance.currentUser;
 
-      final doc = await FirebaseFirestore.instance
-          .collection('users')
-          .doc(uid)
-          .get();
+    if (user == null) return;
 
-      if (doc.exists && doc.data()?['name'] != null) {
-        setState(() {
-          userName = doc.data()!['name'];
-          isLoadingName = false;
-        });
-      } else {
-        setState(() {
-          userName = 'Guest';
-          isLoadingName = false;
-        });
-      }
-    } catch (e) {
-      debugPrint('Firestore Error: $e');
+    final doc = await firestoreRepo.getUser(user.uid);
+
+    if (doc.exists) {
       setState(() {
-        userName = 'Guest';
-        isLoadingName = false;
+        userName = doc["name"];
       });
     }
   }
@@ -71,155 +44,129 @@ class _HomeState extends State<Home> {
     return Scaffold(
       backgroundColor: AppColors.backgroundColor,
       appBar: AppBar(
-        backgroundColor: AppColors.backgroundColor,
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        backgroundColor:AppColors.backgroundColor,
+        title:
+          Row(
+             mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(
-              'Nafi3',
-              style: TextStyle(color: AppColors.primaryColor),
-            ),
-            Icon(
-              Icons.notifications_outlined,
-              color: AppColors.primaryColor,
-            ),
-          ],
-        ),
+            Text("Nafi3",style: TextStyle(color: AppColors.primaryColor),),
+
+           Icon(Icons.notifications_outlined,color: AppColors.primaryColor,)
+              ],
+              ),
       ),
+
       body: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(16.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              isLoadingName
-                  ? const SizedBox(
-                      height: 30,
-                      child: CircularProgressIndicator(strokeWidth: 2),
-                    )
-                  : Text(
-                      'Hello, $userName!',
-                      style: const TextStyle(
-                        fontSize: 25,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-              const Text('What would you like to find today? '),
-              const SizedBox(height: 20),
+              Text("Hello, $userName 👋",
+                style: TextStyle(
+                  fontSize: 25,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              Text("What would you like to find today? "),
+              const SizedBox(height: 20,),
               TextField(
                 decoration: InputDecoration(
-                  hintText: 'Search for Donaton...',
-                  prefixIcon: const Icon(Icons.search),
-                  suffixIcon: Icon(
-                    Icons.tune,
-                    color: AppColors.primaryColor,
-                  ),
+                  hintText: "Search for Donaton...",
+                  prefixIcon: Icon(Icons.search),
+                  suffixIcon: Icon(Icons.tune,color: AppColors.primaryColor,),
                   filled: true,
-                  fillColor: const Color(0xffF5F5F5),
+                  fillColor: Color(0xffF5F5F5),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(15),
                     borderSide: BorderSide.none,
                   ),
                 ),
               ),
-              const SizedBox(height: 20),
-              Row(
+              const SizedBox(height: 20,),
+               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: const [
-                  Text(
-                    'Categories',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 20,
-                    ),
+                children: [
+                  Text("Categories",style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20,
                   ),
-                  Text(
-                    'View All',
-                    style: TextStyle(
-                      color: AppColors.primaryColor,
-                      fontSize: 14,
-                    ),
                   ),
+                  Text("View All",style: TextStyle(
+                    color: AppColors.primaryColor,
+                    fontSize: 14,
+                  ),)
                 ],
               ),
-              const SizedBox(height: 20),
+               const SizedBox(height: 20,),
               SizedBox(
-                height: 120,
-                child: ListView(
-                  scrollDirection: Axis.horizontal,
-                  children: [
-                    categoryCard('Food', Icons.restaurant),
-                    categoryCard('Clothes', Icons.checkroom),
-                    categoryCard('Medicine', Icons.medical_services),
-                    categoryCard('Books', Icons.menu_book),
-                    categoryCard(
-                      'Skills',
-                      Icons.psychology_outlined,
-                      isNew: true,
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 20),
+              height: 120,
+              child: ListView(
+              scrollDirection: Axis.horizontal,
+              children: [
+              categoryCard(context, "Food", Icons.restaurant),
+              categoryCard(context, "Clothes", Icons.checkroom),
+              categoryCard(context, "Medicine", Icons.medical_services),
+              categoryCard(context, "Books", Icons.menu_book),
+              categoryCard(context, "Skills", Icons.psychology_outlined, isNew: true),
+    ],
+  ),
+),
+              const SizedBox(height: 20,),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: const [
-                  Text(
-                    'Recent Donations',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 20,
-                    ),
+                children: [
+                  Text("Recent Donations",style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20,
                   ),
-                  Text(
-                    'View All',
-                    style: TextStyle(
-                      color: AppColors.primaryColor,
-                      fontSize: 14,
-                    ),
                   ),
+                  Text("View All",style: TextStyle(
+                    color: AppColors.primaryColor,
+                    fontSize: 14,
+                  ),)
                 ],
               ),
-              const SizedBox(height: 20),
-              recentCard(
-                'Food',
-                'Organic Vegetable Box',
-                '2.5 km away',
-                AppAssets.vegetables,
-              ),
-              const SizedBox(height: 20),
-              recentCard(
-                'Clothes',
-                'Winter Jackets (Kids)',
-                '0.8 km away',
-                AppAssets.toy,
-              ),
-              const SizedBox(height: 20),
-              recentCard(
-                'Books',
-                'Educational Books Set',
-                '1.2 km away',
-                AppAssets.books,
-              ),
-              const SizedBox(height: 20),
+              const SizedBox(height: 20,),
+              recentCard(context, "Food", "Organic Vegetable Box", "2.5 km away", AppAssets.vegetables),
+              const SizedBox(height: 20,),
+              recentCard(context, "Clothes", "Winter Jackets (Kids)", "0.8 km away", AppAssets.toy),
+              const SizedBox(height: 20,),
+              recentCard(context, "Books", "Educational Books Set", "1.2 km away", AppAssets.books),
+              const SizedBox(height: 20,),
             ],
           ),
         ),
       ),
-      bottomNavigationBar: const Navbar(currentIndex: 0),
+      bottomNavigationBar: const Navbar( currentIndex: 0),
     );
   }
 }
 
 ////////////////////////////////wedgets////////////////////////
 
-Widget recentCard(
+Widget recentCard(  BuildContext context,
   String category,
   String title,
   String distance,
   String img,
-) {
-  return Card(
+  ) 
+{
+  return GestureDetector(
+  onTap: () {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (_) => DonationDetailsScreen(
+          category: category,
+          title: title,
+          distance: distance,
+          image: img,
+        ),
+      ),
+    );
+  },
+  child:Card(
     elevation: 3,
     color: Colors.white,
     shape: RoundedRectangleBorder(
@@ -229,6 +176,7 @@ Widget recentCard(
       padding: const EdgeInsets.all(12),
       child: Row(
         children: [
+          // Image
           ClipRRect(
             borderRadius: BorderRadius.circular(15),
             child: Image.asset(
@@ -238,7 +186,9 @@ Widget recentCard(
               fit: BoxFit.cover,
             ),
           ),
+
           const SizedBox(width: 15),
+
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -290,29 +240,53 @@ Widget recentCard(
         ],
       ),
     ),
+  ),
   );
 }
 
-Widget categoryCard(String title, IconData icon, {bool isNew = false}) {
+Widget categoryCard(BuildContext context, String title,IconData icon, {bool isNew = false,})
+ {
   return Padding(
     padding: const EdgeInsets.only(right: 16),
     child: Column(
       children: [
         Stack(
           children: [
-            Container(
-              width: 80,
-              height: 80,
-              decoration: BoxDecoration(
-                color: const Color(0xffE8F4E6),
-                borderRadius: BorderRadius.circular(20),
-              ),
-              child: Icon(
-                icon,
-                color: AppColors.primaryColor,
-                size: 40,
+            GestureDetector(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => CategoryScreen(
+                      category: title,
+                    ) as Widget,
+                  ),
+                );
+              },
+              child: Container(
+                width: 80,
+                height: 80,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(18),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.withOpacity(0.2),
+                      blurRadius: 6,
+                      offset: const Offset(0, 4),
+                    ),
+                  ],
+                ),
+                child: Center(
+                  child: Icon(
+                    icon,
+                    size: 36,
+                    color: AppColors.primaryColor,
+                  ),
+                ),
               ),
             ),
+
             if (isNew)
               Positioned(
                 top: 6,
@@ -327,7 +301,7 @@ Widget categoryCard(String title, IconData icon, {bool isNew = false}) {
                     borderRadius: BorderRadius.circular(10),
                   ),
                   child: const Text(
-                    'NEW',
+                    "NEW",
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 10,

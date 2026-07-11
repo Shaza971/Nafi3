@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:nafi3_project/core/utils/app_colors.dart';
 import 'package:nafi3_project/core/widget/navbar.dart';
+import 'package:nafi3_project/features/add_donation/data/donation_repo.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class AddDonationScreen extends StatefulWidget {
   const AddDonationScreen({super.key});
@@ -10,6 +12,71 @@ class AddDonationScreen extends StatefulWidget {
 }
 
 class _AddDonationScreenState extends State<AddDonationScreen> {
+  final TextEditingController titleController = TextEditingController();
+  final TextEditingController descriptionController =
+    TextEditingController();
+  final TextEditingController locationController =
+    TextEditingController();
+  final DonationRepo donationRepo = DonationRepo();
+
+  Future<void> publishDonation() async {
+  if (titleController.text.trim().isEmpty ||
+      descriptionController.text.trim().isEmpty ||
+      locationController.text.trim().isEmpty ||
+      selectedCategory == null) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text("Please fill all fields"),
+      ),
+    );
+    return;
+  }
+
+  try {
+    final user = FirebaseAuth.instance.currentUser;
+
+    if (user == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text("Please login first"),
+        ),
+      );
+      return;
+    }
+
+    await donationRepo.addDonation(
+      title: titleController.text.trim(),
+      category: selectedCategory!,
+      description: descriptionController.text.trim(),
+      location: locationController.text.trim(),
+      userId: user.uid,
+    );
+
+    // ignore: use_build_context_synchronously
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text("Donation published successfully 🎉"),
+        backgroundColor: Colors.green,
+      ),
+    );
+
+    titleController.clear();
+    descriptionController.clear();
+    locationController.clear();
+
+    setState(() {
+      selectedCategory = null;
+    });
+  } catch (e) {
+    // ignore: use_build_context_synchronously
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(e.toString()),
+      ),
+    );
+  }
+}
+    String? selectedCategory;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -128,15 +195,9 @@ class _AddDonationScreenState extends State<AddDonationScreen> {
 
   ElevatedButton appelevatedbutton() {
     return ElevatedButton(
-      onPressed: () {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text("Donation published successfully 🎉"),
-            backgroundColor: Colors.green,
-            duration: Duration(seconds: 2),
-          ),
-        );
-      },
+     onPressed: () async {
+     await publishDonation();
+     },
       style: ElevatedButton.styleFrom(
         backgroundColor: AppColors.darkgreen,
         foregroundColor: Colors.white,
@@ -153,6 +214,7 @@ class _AddDonationScreenState extends State<AddDonationScreen> {
 
   TextFormField apptexttittle() {
     return TextFormField(
+      controller: titleController,
       decoration: InputDecoration(
         hintText: "e.g. Warm Winter Coat",
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(30)),
@@ -186,12 +248,19 @@ class _AddDonationScreenState extends State<AddDonationScreen> {
         DropdownMenuItem(value: "Medicine", child: Text("Medicine")),
         DropdownMenuItem(value: "Skills", child: Text("Skills")),
       ],
-      onChanged: (value) {},
+      initialValue: selectedCategory,
+
+      onChanged: (value) {
+      setState(() {
+      selectedCategory = value;
+     });
+  },
     );
-  }
+}
 
   TextFormField appdescription() {
     return TextFormField(
+      controller: descriptionController,
       maxLines: 5,
       decoration: InputDecoration(
         hintText:
@@ -213,6 +282,7 @@ class _AddDonationScreenState extends State<AddDonationScreen> {
 
   TextFormField applocationfield() {
     return TextFormField(
+        controller: locationController,
       decoration: InputDecoration(
         prefixIcon: Icon(Icons.location_on_outlined),
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(30)),

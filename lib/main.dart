@@ -1,34 +1,45 @@
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:nafi3_project/core/utils/app_colors.dart';
-import 'package:nafi3_project/features/model/onboarding_model.dart';
-import 'package:nafi3_project/firebase_options.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-Future<void> main() async {
+import 'firebase_options.dart';
+import 'package:nafi3_project/features/model/ui/onboarding_model.dart';
+import 'package:nafi3_project/features/auth/ui/login.dart';
+
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  runApp(const MyApp());
+
+  final prefs = await SharedPreferences.getInstance();
+
+  bool seenOnboarding =
+      prefs.getBool("seenOnboarding") ?? false;
+
+  runApp(
+    MyApp(
+      seenOnboarding: seenOnboarding,
+    ),
+  );
 }
 
-// class DefaultFirebaseOptions {
-//   static FirebaseOptions? get currentPlatform => null;
-// }
-
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  final bool seenOnboarding;
+
+  const MyApp({
+    super.key,
+    required this.seenOnboarding,
+  });
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
-      debugShowCheckedModeBanner: false, // لإخفاء شريط الـ Debug الأحمر
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: AppColors.primaryColor),
-        useMaterial3: true,
-      ),
-      home: const OnboardingScreen(),
+      debugShowCheckedModeBanner: false,
+      home: seenOnboarding
+          ? const LoginScreen()
+          : const OnboardingScreen(),
     );
   }
 }

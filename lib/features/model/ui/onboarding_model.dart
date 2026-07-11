@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:nafi3_project/features/auth/login.dart';
-import 'package:smooth_page_indicator/smooth_page_indicator.dart';
+import 'package:nafi3_project/features/model/data/pagesdata.dart';
+import 'package:smooth_page_indicator/smooth_page_indicator.dart' as smooth_page_indicator;
+import 'package:nafi3_project/features/auth/ui/login.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
 
 class OnboardingScreen extends StatefulWidget {
   const OnboardingScreen({super.key});
@@ -12,34 +15,26 @@ class OnboardingScreen extends StatefulWidget {
 class _OnboardingScreenState extends State<OnboardingScreen> {
   final PageController controller = PageController();
   int currentIndex = 0;
+  Future<void> finishOnboarding() async {
+  final prefs = await SharedPreferences.getInstance();
+
+  await prefs.setBool("seenOnboarding", true);
+
+  Navigator.pushReplacement(
+    // ignore: use_build_context_synchronously
+    context,
+    MaterialPageRoute(
+      builder: (_) => const LoginScreen(),
+    ),
+  );
+}
 
   bool get isFirstPage => currentIndex == 0;
-  bool get isLastPage => currentIndex == pages.length - 1;
+  bool get isLastPage => currentIndex == pages.pages.length - 1;
 
-  final List<Map<String, String>> pages = [
-    {
-      "image":
-          "https://images.pexels.com/photos/6995065/pexels-photo-6995065.jpeg?w=600",
-      "appBarTitle": "NAFI3",
-      "title": "Welcome to Community Hub",
-      "subtitle": "Join a community where kindness makes a difference.",
-    },
-    {
-      "image":
-          "https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?w=600",
-      "appBarTitle": "volunteer_activism NAFI3",
-      "title": "Share What You Have",
-      "subtitle":
-          "Donate food, clothes, books, medicine, or your skills to help others.",
-    },
-    {
-      "image":
-          "https://images.unsplash.com/photo-1593113598332-cd288d649433?w=600",
-      "appBarTitle": "",
-      "title": "Every Donation Matters",
-      "subtitle": "Start helping your community today with just a few taps.",
-    },
-  ];
+  Pagesdata pages=Pagesdata();
+
+  
 
   @override
   void dispose() {
@@ -73,7 +68,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                           },
                         )
                       : Text(
-                          pages[currentIndex]["appBarTitle"]!,
+                          pages.pages[currentIndex]["appBarTitle"]!,
                           style: const TextStyle(
                             color: Color(0xFF1E5E3A),
                             fontSize: 22,
@@ -83,12 +78,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                   isFirstPage
                       ? TextButton(
                           onPressed: () {
-                            Navigator.pushReplacement(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => const LoginScreen(),
-                              ),
-                            );
+                            finishOnboarding();
                           },
                           child: const Text(
                             "Skip",
@@ -102,7 +92,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
             Expanded(
               child: PageView.builder(
                 controller: controller,
-                itemCount: pages.length,
+                itemCount: pages.pages.length,
                 onPageChanged: (index) {
                   setState(() {
                     currentIndex = index;
@@ -124,7 +114,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(30),
                             child: Image.network(
-                              pages[index]["image"]!,
+                              pages.pages[currentIndex]["image"]!,
                               fit: BoxFit.contain,
                               errorBuilder: (context, error, stackTrace) {
                                 return const Center(
@@ -140,7 +130,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                         ),
                         const SizedBox(height: 35),
                         Text(
-                          pages[index]["title"]!,
+                          pages.pages[currentIndex]["title"]!,
                           textAlign: TextAlign.center,
                           style: const TextStyle(
                             fontSize: 28,
@@ -150,7 +140,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                         ),
                         const SizedBox(height: 15),
                         Text(
-                          pages[index]["subtitle"]!,
+                          pages.pages[currentIndex]["subtitle"]!,
                           textAlign: TextAlign.center,
                           style: const TextStyle(
                             fontSize: 16,
@@ -164,10 +154,10 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 },
               ),
             ),
-            SmoothPageIndicator(
+            smooth_page_indicator.SmoothPageIndicator(
               controller: controller,
-              count: pages.length,
-              effect: const ExpandingDotsEffect(
+              count: pages.pages.length,
+              effect: const smooth_page_indicator.ExpandingDotsEffect(
                 activeDotColor: Color(0xFF1E5E3A),
                 dotColor: Color(0xFFD1DCD6),
                 dotHeight: 8,
@@ -265,12 +255,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                         ),
                         onPressed: () {
                           if (isLastPage) {
-                            Navigator.pushReplacement(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => const LoginScreen(),
-                              ),
-                            );
+                            finishOnboarding();
                           } else {
                             controller.nextPage(
                               duration: const Duration(milliseconds: 300),

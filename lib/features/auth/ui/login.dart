@@ -1,7 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:nafi3_project/features/auth/signup.dart';
+import 'package:nafi3_project/features/auth/ui/signup.dart';
+import 'package:nafi3_project/features/auth/data/auth_repo.dart';
 import 'package:nafi3_project/features/home/ui/home.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -12,11 +13,48 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  final AuthRepo authRepo = AuthRepo();
+
+final TextEditingController emailController = TextEditingController();
+final TextEditingController passwordController = TextEditingController();
+
+Future<void> signIn() async {
+  if (emailController.text.trim().isEmpty ||
+      passwordController.text.trim().isEmpty) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text("Please fill all fields"),
+      ),
+    );
+    return;
+  }
+
+  try {
+    await authRepo.signIn(
+      emailController.text.trim(),
+      passwordController.text.trim(),
+    );
+
+    Navigator.pushReplacement(
+      // ignore: use_build_context_synchronously
+      context,
+      MaterialPageRoute(
+        builder: (_) => Home(),
+      ),
+    );
+  } on FirebaseAuthException catch (e) {
+    // ignore: use_build_context_synchronously
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(e.message ?? "Login Failed"),
+      ),
+    );
+  }
+}
+
   bool obscure = true;
   bool isLoading = false;
 
-  final TextEditingController emailController = TextEditingController();
-  final TextEditingController passwordController = TextEditingController();
 
   @override
   void dispose() {
@@ -25,40 +63,6 @@ class _LoginScreenState extends State<LoginScreen> {
     super.dispose();
   }
 
-  Future<void> _login() async {
-    if (emailController.text.trim().isEmpty ||
-        passwordController.text.trim().isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Please fill all fields')),
-      );
-      return;
-    }
-
-    setState(() => isLoading = true);
-
-    try {
-      await FirebaseAuth.instance.signInWithEmailAndPassword(
-        email: emailController.text.trim(),
-        password: passwordController.text.trim(),
-      );
-
-      if (!mounted) return;
-
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (_) => const Home()),
-      );
-    } on FirebaseAuthException catch (e) {
-      if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(e.message ?? 'Login failed')),
-      );
-    } finally {
-      if (mounted) {
-        setState(() => isLoading = false);
-      }
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -123,12 +127,15 @@ class _LoginScreenState extends State<LoginScreen> {
                 controller: emailController,
                 keyboardType: TextInputType.emailAddress,
                 decoration: InputDecoration(
-                  hintText: 'name@example.com',
+
+                  hintText: "name@example.com",
+
                   prefixIcon: const Icon(Icons.mail_outline),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(35),
                   ),
                 ),
+
               ),
               const SizedBox(height: 30),
               Row(
@@ -173,6 +180,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     borderRadius: BorderRadius.circular(35),
                   ),
                 ),
+                  
               ),
               const SizedBox(height: 40),
               SizedBox(
@@ -185,30 +193,24 @@ class _LoginScreenState extends State<LoginScreen> {
                       borderRadius: BorderRadius.circular(40),
                     ),
                   ),
-                  onPressed: isLoading ? null : _login,
-                  child: isLoading
-                      ? const SizedBox(
-                          width: 24,
-                          height: 24,
-                          child: CircularProgressIndicator(
-                            color: Colors.white,
-                            strokeWidth: 2,
-                          ),
-                        )
-                      : const Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              'Login',
-                              style: TextStyle(
-                                fontSize: 24,
-                                color: Colors.white,
-                              ),
-                            ),
-                            SizedBox(width: 10),
-                            Icon(Icons.login, color: Colors.white),
-                          ],
+
+                  onPressed: () async {
+                    await signIn();
+                  },
+
+                  child: const Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+
+                      Text(
+                        "Login",
+                        style: TextStyle(
+                          fontSize: 24,
+                          color: Colors.white,
                         ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
               const SizedBox(height: 40),
@@ -237,6 +239,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                 ],
               ),
+             
               const SizedBox(height: 40),
               OutlinedButton(
                 style: OutlinedButton.styleFrom(
@@ -287,7 +290,7 @@ class _LoginScreenState extends State<LoginScreen> {
             ],
           ),
         ),
-      ),
+        ),
     );
   }
 

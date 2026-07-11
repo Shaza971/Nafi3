@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:nafi3_project/core/utils/app_colors.dart';
+import 'package:nafi3_project/features/add_donation/ui/add_donation_screen.dart';
+import 'package:nafi3_project/features/favorits/ui/favorit.dart';
 import 'package:nafi3_project/features/home/ui/home.dart';
-import 'package:nafi3_project/features/add_donation/add_donation_screen.dart';
-import 'package:nafi3_project/features/favorits/favorit.dart';
-import 'package:nafi3_project/features/profile/profile_screen.dart';
+import 'package:nafi3_project/features/profile/ui/profile_screen.dart';
 
 class Navbar extends StatelessWidget {
   final int currentIndex;
@@ -42,7 +42,9 @@ class Navbar extends StatelessWidget {
         } else if (index == 3) {
           Navigator.pushReplacement(
             context,
-            MaterialPageRoute(builder: (context) => const ProfileScreen()),
+            MaterialPageRoute(
+              builder: (context) =>  ProfileScreen(),
+            ),
           );
         }
       },
