@@ -31,7 +31,7 @@ class Navbar extends StatelessWidget {
           Navigator.pushReplacement(
             context,
             MaterialPageRoute(
-              builder: (context) => const Home(),
+              builder: (context) =>  Home(),
             ),
           );
         } else if (index == 1) {
