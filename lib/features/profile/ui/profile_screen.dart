@@ -1,3 +1,5 @@
+
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:nafi3_project/core/utils/app_colors.dart';
 import 'package:nafi3_project/core/widget/donation_card.dart';
@@ -6,7 +8,6 @@ import 'package:nafi3_project/core/widget/saved_causes_card.dart';
 import 'package:nafi3_project/core/widget/settings_list.dart';
 import 'package:nafi3_project/features/auth/data/auth_repo.dart';
 import 'package:nafi3_project/features/auth/ui/login.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:nafi3_project/features/auth/data/firestore_repo.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -50,20 +51,19 @@ class _ProfileScreenState extends State<ProfileScreen> {
     return Scaffold(
       backgroundColor: AppColors.backgroundColor,
       appBar: AppBar(
-        backgroundColor:AppColors.backgroundColor,
-         leading: const Icon(
-        Icons.arrow_back,
-        color: Colors.black,
-  ),
-        title: const Text("Community Hub"),
+        backgroundColor: AppColors.backgroundColor,
+        leading: const Icon(
+          Icons.arrow_back,
+          color: Colors.black,
+        ),
+        title: const Text('Community Hub'),
         centerTitle: true,
-
         actions: const [
-      Padding(
-      padding: EdgeInsets.only(right: 16),
-      child: Icon(Icons.more_vert),
-    ),
-  ],
+          Padding(
+            padding: EdgeInsets.only(right: 16),
+            child: Icon(Icons.more_vert),
+          ),
+        ],
       ),
       body: SafeArea(
         child: SingleChildScrollView(
@@ -81,10 +81,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
           ),
         ),
       ),
-     bottomNavigationBar: const Navbar(currentIndex: 3),
+      bottomNavigationBar: const Navbar(currentIndex: 3),
     );
   }
-}
+
 
 ////////////////////////widgets//////////////////////
   
@@ -195,10 +195,12 @@ Widget logoutButton(BuildContext context) {
               fontWeight: FontWeight.w600,
             ),
           ),
-        ],
+          ],
+        ),
       ),
-    ),
-  );
+    );
+}
 
+ 
   }
 

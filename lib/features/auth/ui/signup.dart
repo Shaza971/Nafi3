@@ -1,11 +1,9 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:nafi3_project/core/widget/textfield.dart';
 import 'package:nafi3_project/features/auth/data/auth_repo.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:nafi3_project/features/auth/data/firestore_repo.dart';
 import 'package:nafi3_project/features/home/ui/home.dart';
-
-
 
 class Signupscreen extends StatefulWidget {
   const Signupscreen({super.key});
@@ -86,64 +84,51 @@ final TextEditingController confirmPasswordController =
   bool isChecked = false;
   bool obscurePassword = true;
   bool obscureConfirmPassword = true;
-
+  bool isLoading = false;
+  @override
+  void dispose() {
+    nameController.dispose();
+    emailController.dispose();
+    passwordController.dispose();
+    confirmPasswordController.dispose();
+    super.dispose();
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-
       body: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.symmetric(horizontal: 20),
-
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-
               const SizedBox(height: 15),
-
-              /// Header
               Row(
                 children: [
-
                   IconButton(
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
+                    onPressed: () => Navigator.pop(context),
                     icon: const Icon(
                       Icons.arrow_back_ios_new,
                       color: Colors.green,
                     ),
                   ),
-
                   const Spacer(),
-
-                  const Icon(
-                    Icons.groups,
-                    color: Colors.green,
-                  ),
-
+                  const Icon(Icons.groups, color: Colors.green),
                   const SizedBox(width: 8),
-
                   const Text(
-                    "Community Hub",
+                    'Community Hub',
                     style: TextStyle(
                       color: Colors.green,
                       fontWeight: FontWeight.bold,
                       fontSize: 18,
                     ),
                   ),
-
                   const Spacer(),
-
                   const SizedBox(width: 35),
-
                 ],
               ),
-
               const SizedBox(height: 25),
-
-              /// Image
               Center(
                 child: Container(
                   width: 110,
@@ -159,55 +144,44 @@ final TextEditingController confirmPasswordController =
                   ),
                 ),
               ),
-
               const SizedBox(height: 25),
-
               const Center(
                 child: Text(
-                  "Join Our Community",
+                  'Join Our Community',
                   style: TextStyle(
                     fontSize: 30,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
               ),
-
               const SizedBox(height: 10),
-
               const Center(
                 child: Text(
-                  "Connect with causes you care about and\nstart making a real difference today.",
+                  'Connect with causes you care about and\nstart making a real difference today.',
                   textAlign: TextAlign.center,
-                  style: TextStyle(
-                    color: Colors.grey,
-                    fontSize: 16,
-                  ),
+                  style: TextStyle(color: Colors.grey, fontSize: 16),
                 ),
               ),
-
               const SizedBox(height: 30),
-
               CustomTextField(
-                label: "Full Name",
-                hint: "John Doe",
-                icon: Icons.person_outline,
                 controller: nameController,
+                label: 'Full Name',
+                hint: 'John Doe',
+                icon: Icons.person_outline,
               ),
-
               const SizedBox(height: 20),
-
               CustomTextField(
-                label: "Email Address",
-                hint: "email@example.com",
-                icon: Icons.email_outlined,
                 controller: emailController,
+                label: 'Email Address',
+                hint: 'email@example.com',
+                icon: Icons.email_outlined,
+                
               ),
-
               const SizedBox(height: 20),
-
               CustomTextField(
-                label: "Password",
-                hint: "********",
+                controller: passwordController,
+                label: 'Password',
+                hint: '********',
                 icon: Icons.lock_outline,
                 obscureText: obscurePassword,
                 suffixIcon: IconButton(
@@ -217,19 +191,16 @@ final TextEditingController confirmPasswordController =
                         : Icons.visibility_off_outlined,
                   ),
                   onPressed: () {
-                    setState(() {
-                      obscurePassword = !obscurePassword;
-                    });
+                    setState(() => obscurePassword = !obscurePassword);
                   },
                 ),
-                controller: passwordController,
+               
               ),
-
               const SizedBox(height: 20),
-
               CustomTextField(
-                label: "Confirm Password",
-                hint: "********",
+                controller: confirmPasswordController,
+                label: 'Confirm Password',
+                hint: '********',
                 icon: Icons.lock_outline,
                 obscureText: obscureConfirmPassword,
                 suffixIcon: IconButton(
@@ -239,62 +210,46 @@ final TextEditingController confirmPasswordController =
                         : Icons.visibility_off_outlined,
                   ),
                   onPressed: () {
-                    setState(() {
-                      obscureConfirmPassword =
-                          !obscureConfirmPassword;
-                    });
+                    setState(
+                      () => obscureConfirmPassword = !obscureConfirmPassword,
+                    );
                   },
                 ),
-                controller: confirmPasswordController,
               ),
-
               const SizedBox(height: 20),
-
               terms(
-                 isChecked, (value) {
-                  setState(() {
-                    isChecked = value!;
-                  });
+                isChecked,
+                (value) {
+                  setState(() => isChecked = value ?? false);
                 },
               ),
-
               const SizedBox(height: 30),
-
               SizedBox(
                 width: double.infinity,
-                child: appbutton( "Create Account",context),
+                child: appbutton('Create Account', context),
               ),
-
               const SizedBox(height: 25),
-
               Center(
-                child: RichText(
-                  text: const TextSpan(
-                    style: TextStyle(
-                      color: Colors.black54,
-                      fontSize: 16,
-                    ),
-                    children: [
-
-                      TextSpan(
-                        text: "Already have an account? ",
-                      ),
-
-                      TextSpan(
-                        text: "Login",
-                        style: TextStyle(
-                          color: Colors.green,
-                          fontWeight: FontWeight.bold,
+                child: GestureDetector(
+                  onTap: () => Navigator.pop(context),
+                  child: RichText(
+                    text: const TextSpan(
+                      style: TextStyle(color: Colors.black54, fontSize: 16),
+                      children: [
+                        TextSpan(text: 'Already have an account? '),
+                        TextSpan(
+                          text: 'Login',
+                          style: TextStyle(
+                            color: Colors.green,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
-                      ),
-
-                    ],
+                      ],
+                    ),
                   ),
                 ),
               ),
-
               const SizedBox(height: 20),
-
             ],
           ),
         ),
@@ -302,30 +257,45 @@ final TextEditingController confirmPasswordController =
     );
   }
 
+
 /////////////////////////widgets/////////////////////////
 
-  Widget appbutton (String buttonname,BuildContext context) {
+
+
+  Widget appbutton(String buttonname, BuildContext context) {
     return GestureDetector(
+
      onTap: () async {
   await signUp();
     },
 
       child: Container(
         decoration: BoxDecoration(
-          color: Colors.green,
+          color: isLoading ? Colors.green.shade300 : Colors.green,
           borderRadius: BorderRadius.circular(12),
         ),
         height: 50,
-        width: 360,
-        child: Center(child: Text(buttonname,style: TextStyle(
-          color: Colors.white,
-        ),),),
+        width: double.infinity,
+        child: Center(
+          child: isLoading
+              ? const SizedBox(
+                  width: 24,
+                  height: 24,
+                  child: CircularProgressIndicator(
+                    color: Colors.white,
+                    strokeWidth: 2,
+                  ),
+                )
+              : Text(
+                  buttonname,
+                  style: const TextStyle(color: Colors.white),
+                ),
+        ),
       ),
     );
   }
-  
 
-  Widget terms(bool isChecked, onChanged) {
+  Widget terms(bool isChecked, ValueChanged<bool?> onChanged) {
     return Row(
       children: [
         Checkbox(
@@ -333,26 +303,22 @@ final TextEditingController confirmPasswordController =
          activeColor: Colors.green,
          onChanged: onChanged,),
             
-
         Expanded(
           child: RichText(
             text: const TextSpan(
-              style: TextStyle(
-                color: Colors.black,
-                fontSize: 14,
-              ),
+              style: TextStyle(color: Colors.black, fontSize: 14),
               children: [
-                TextSpan(text: "I agree to the "),
+                TextSpan(text: 'I agree to the '),
                 TextSpan(
-                  text: "Terms of Service",
+                  text: 'Terms of Service',
                   style: TextStyle(
                     color: Colors.green,
                     decoration: TextDecoration.underline,
                   ),
                 ),
-                TextSpan(text: " and "),
+                TextSpan(text: ' and '),
                 TextSpan(
-                  text: "Privacy Policy",
+                  text: 'Privacy Policy',
                   style: TextStyle(
                     color: Colors.green,
                     decoration: TextDecoration.underline,

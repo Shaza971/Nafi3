@@ -230,7 +230,6 @@ Widget recentCard(  BuildContext context,
               ],
             ),
           ),
-
           const Align(
             alignment: Alignment.topCenter,
             child: Icon(

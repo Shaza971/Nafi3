@@ -1,13 +1,23 @@
 {
   "project_info": {
+<<<<<<< HEAD
     "project_number": "31891669250",
     "project_id": "nafi3-fa1e5",
     "storage_bucket": "nafi3-fa1e5.firebasestorage.app"
+=======
+    "project_number": "814660781162",
+    "project_id": "nafi3-9805b",
+    "storage_bucket": "nafi3-9805b.firebasestorage.app"
+>>>>>>> origin/main
   },
   "client": [
     {
       "client_info": {
+<<<<<<< HEAD
         "mobilesdk_app_id": "1:31891669250:android:19c808f3c02d8ab756821b",
+=======
+        "mobilesdk_app_id": "1:814660781162:android:d29785693971391a67f613",
+>>>>>>> origin/main
         "android_client_info": {
           "package_name": "com.example.nafi3_project"
         }
@@ -15,7 +25,11 @@
       "oauth_client": [],
       "api_key": [
         {
+<<<<<<< HEAD
           "current_key": "AIzaSyBVKZQK210JU8Sfgv8KFBBVE68ORcyas9I"
+=======
+          "current_key": "AIzaSyB2iH92S_B-iSK_T_aHDSRIF4xSrEgEOSs"
+>>>>>>> origin/main
         }
       ],
       "services": {
