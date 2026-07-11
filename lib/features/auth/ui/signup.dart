@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:nafi3_project/core/widget/textfield.dart';
-import 'package:nafi3_project/features/home/home.dart';
+import 'package:nafi3_project/features/auth/data/auth_repo.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:nafi3_project/features/auth/data/firestore_repo.dart';
+import 'package:nafi3_project/features/home/ui/home.dart';
+
 
 
 class Signupscreen extends StatefulWidget {
@@ -11,6 +15,74 @@ class Signupscreen extends StatefulWidget {
 }
 
 class _SignupscreenState extends State<Signupscreen> {
+  final AuthRepo authRepo = AuthRepo();
+  final FirestoreRepo firestoreRepo = FirestoreRepo();
+
+  Future<void> signUp() async {
+    if (!isChecked) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text("Please accept Terms of Service"),
+        ),
+      );
+      return;
+    }
+
+    if (emailController.text.trim().isEmpty ||
+        passwordController.text.trim().isEmpty ||
+        nameController.text.trim().isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text("Please fill all fields"),
+        ),
+      );
+      return;
+    }
+
+    if (passwordController.text != confirmPasswordController.text) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text("Passwords do not match"),
+        ),
+      );
+      return;
+    }
+
+    try {
+     
+      final userCredential = await authRepo.signUp(
+  emailController.text.trim(),
+  passwordController.text.trim(),
+);
+
+await firestoreRepo.saveUser(
+  uid: userCredential.user!.uid,
+  name: nameController.text.trim(),
+  email: emailController.text.trim(),
+);
+
+Navigator.pushReplacement(
+  // ignore: use_build_context_synchronously
+  context,
+  MaterialPageRoute(
+    builder: (_) => Home(),
+  ),
+);
+    } on FirebaseAuthException catch (e) {
+      // ignore: use_build_context_synchronously
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(e.message ?? "Registration Failed"),
+        ),
+      );
+    }
+  }
+
+final TextEditingController nameController = TextEditingController();
+final TextEditingController emailController = TextEditingController();
+final TextEditingController passwordController = TextEditingController();
+final TextEditingController confirmPasswordController =
+    TextEditingController();
   bool isChecked = false;
   bool obscurePassword = true;
   bool obscureConfirmPassword = true;
@@ -119,6 +191,7 @@ class _SignupscreenState extends State<Signupscreen> {
                 label: "Full Name",
                 hint: "John Doe",
                 icon: Icons.person_outline,
+                controller: nameController,
               ),
 
               const SizedBox(height: 20),
@@ -127,6 +200,7 @@ class _SignupscreenState extends State<Signupscreen> {
                 label: "Email Address",
                 hint: "email@example.com",
                 icon: Icons.email_outlined,
+                controller: emailController,
               ),
 
               const SizedBox(height: 20),
@@ -148,6 +222,7 @@ class _SignupscreenState extends State<Signupscreen> {
                     });
                   },
                 ),
+                controller: passwordController,
               ),
 
               const SizedBox(height: 20),
@@ -170,6 +245,7 @@ class _SignupscreenState extends State<Signupscreen> {
                     });
                   },
                 ),
+                controller: confirmPasswordController,
               ),
 
               const SizedBox(height: 20),
@@ -225,18 +301,15 @@ class _SignupscreenState extends State<Signupscreen> {
       ),
     );
   }
-}
+
 /////////////////////////widgets/////////////////////////
 
   Widget appbutton (String buttonname,BuildContext context) {
     return GestureDetector(
-      onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) =>Home()),
-      
-            );
-      },
+     onTap: () async {
+  await signUp();
+    },
+
       child: Container(
         decoration: BoxDecoration(
           color: Colors.green,
@@ -256,11 +329,9 @@ class _SignupscreenState extends State<Signupscreen> {
     return Row(
       children: [
         Checkbox(
-          value: isChecked,
-          activeColor: Colors.green,
-          onChanged: (value) {
-              isChecked = value!;
-            }),
+         value: isChecked,
+         activeColor: Colors.green,
+         onChanged: onChanged,),
             
 
         Expanded(
@@ -294,3 +365,4 @@ class _SignupscreenState extends State<Signupscreen> {
       ],
     );
   }
+}

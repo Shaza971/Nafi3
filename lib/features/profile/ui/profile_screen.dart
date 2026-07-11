@@ -4,11 +4,46 @@ import 'package:nafi3_project/core/widget/donation_card.dart';
 import 'package:nafi3_project/core/widget/navbar.dart';
 import 'package:nafi3_project/core/widget/saved_causes_card.dart';
 import 'package:nafi3_project/core/widget/settings_list.dart';
+import 'package:nafi3_project/features/auth/data/auth_repo.dart';
+import 'package:nafi3_project/features/auth/ui/login.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:nafi3_project/features/auth/data/firestore_repo.dart';
 
-
-
-class ProfileScreen extends StatelessWidget {
+class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
+
+  @override
+  State<ProfileScreen> createState() => _ProfileScreenState();
+}
+
+class _ProfileScreenState extends State<ProfileScreen> {
+  final AuthRepo authRepo = AuthRepo();
+  final FirestoreRepo firestoreRepo = FirestoreRepo();
+
+  String userName = "";
+  String email = "";
+
+  @override
+  void initState() {
+    super.initState();
+    getUserData();
+  }
+
+  Future<void> getUserData() async {
+    final user = FirebaseAuth.instance.currentUser;
+
+    if (user == null) return;
+
+    email = user.email ?? "";
+
+    final doc = await firestoreRepo.getUser(user.uid);
+
+    if (doc.exists) {
+      setState(() {
+        userName = doc["name"];
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -34,14 +69,14 @@ class ProfileScreen extends StatelessWidget {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              profileHeader(),
+              profileHeader( userName,  email),
                const DonationCard(),
             const SizedBox(height:12),
              const SavedCausesCard(),
              const SizedBox(height:12),
               const SettingsList(),  
                 const SizedBox(height:12),
-              logoutButton()
+              logoutButton(context),
             ],
           ),
         ),
@@ -53,12 +88,11 @@ class ProfileScreen extends StatelessWidget {
 
 ////////////////////////widgets//////////////////////
   
-Widget profileHeader()
-{
-return Padding(
-  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
-  child: SizedBox(
-    width: double.infinity,
+Widget profileHeader(String name, String email) {
+  return Padding(
+    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
+    child: SizedBox(
+      width: double.infinity,
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
@@ -72,9 +106,9 @@ return Padding(
 
         const SizedBox(height: 16),
 
-        const Text(
-          "Sara Mohamed",
-          style: TextStyle(
+        Text(
+          name.isEmpty ? "User" : name,
+          style: const TextStyle(
             fontSize: 24,
             fontWeight: FontWeight.bold,
           ),
@@ -82,9 +116,9 @@ return Padding(
 
         const SizedBox(height: 8),
 
-        const Text(
-          "sarah.j@email.com",
-          style: TextStyle(
+        Text(
+          email,
+          style: const TextStyle(
             fontSize: 16,
             color: Colors.grey,
           ),
@@ -115,9 +149,24 @@ return Padding(
 );
 }
 
-Widget logoutButton()
-{
- return Container(
+
+Widget logoutButton(BuildContext context) {
+  return GestureDetector(
+    onTap: () async {
+      final authRepo = AuthRepo();
+
+      await authRepo.signOut();
+
+      Navigator.pushAndRemoveUntil(
+        // ignore: use_build_context_synchronously
+        context,
+        MaterialPageRoute(
+          builder: (_) => const LoginScreen(),
+        ),
+        (route) => false,
+      );
+    },
+    child: Container(
       width: double.infinity,
       margin: const EdgeInsets.symmetric(
         horizontal: 20,
@@ -127,7 +176,7 @@ Widget logoutButton()
         vertical: 16,
       ),
       decoration: BoxDecoration(
-        color: const Color.fromARGB(255, 255, 255, 255),
+        color: Colors.white,
         borderRadius: BorderRadius.circular(16),
       ),
       child: const Row(
@@ -148,6 +197,8 @@ Widget logoutButton()
           ),
         ],
       ),
-    );
+    ),
+  );
+
   }
 

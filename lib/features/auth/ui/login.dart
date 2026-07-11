@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:nafi3_project/features/home/home.dart';
 
-import 'package:nafi3_project/features/auth/signup.dart';
+import 'package:nafi3_project/features/auth/ui/signup.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:nafi3_project/features/auth/data/auth_repo.dart';
+import 'package:nafi3_project/features/home/ui/home.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -12,6 +14,44 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  final AuthRepo authRepo = AuthRepo();
+
+final TextEditingController emailController = TextEditingController();
+final TextEditingController passwordController = TextEditingController();
+
+Future<void> signIn() async {
+  if (emailController.text.trim().isEmpty ||
+      passwordController.text.trim().isEmpty) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text("Please fill all fields"),
+      ),
+    );
+    return;
+  }
+
+  try {
+    await authRepo.signIn(
+      emailController.text.trim(),
+      passwordController.text.trim(),
+    );
+
+    Navigator.pushReplacement(
+      // ignore: use_build_context_synchronously
+      context,
+      MaterialPageRoute(
+        builder: (_) => Home(),
+      ),
+    );
+  } on FirebaseAuthException catch (e) {
+    // ignore: use_build_context_synchronously
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(e.message ?? "Login Failed"),
+      ),
+    );
+  }
+}
 
   bool obscure = true;
 
@@ -106,6 +146,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
               TextField(
                 decoration: InputDecoration(
+
                   hintText: "name@example.com",
 
                   prefixIcon: const Icon(Icons.mail_outline),
@@ -118,6 +159,8 @@ class _LoginScreenState extends State<LoginScreen> {
                     borderRadius: BorderRadius.circular(35),
                   ),
                 ),
+                  controller: emailController,
+
               ),
 
               const SizedBox(height: 30),
@@ -175,6 +218,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     borderRadius: BorderRadius.circular(35),
                   ),
                 ),
+                  controller: passwordController,
               ),
 
               const SizedBox(height: 40),
@@ -194,12 +238,8 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                   ),
 
-                  onPressed: () {
-                    Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) =>Home()),
-      
-            );
+                  onPressed: () async {
+                    await signIn();
                   },
 
                   child: const Row(
@@ -273,16 +313,13 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
 
               const SizedBox(height: 40),
-
               OutlinedButton(
-
                 style: OutlinedButton.styleFrom(
                   backgroundColor: Colors.green.shade50,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(30),
                   ),
                 ),
-
                 onPressed: () {
                   Navigator.push(
               context,
@@ -290,7 +327,6 @@ class _LoginScreenState extends State<LoginScreen> {
       
             );
                 },
-
                 child: const Padding(
                   padding: EdgeInsets.symmetric(
                     horizontal: 30,
