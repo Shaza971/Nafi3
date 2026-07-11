@@ -1,10 +1,70 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:nafi3_project/core/utils/app_assets.dart';
 import 'package:nafi3_project/core/utils/app_colors.dart';
 import 'package:nafi3_project/core/widget/navbar.dart';
 
-class Home extends StatelessWidget {
-  const Home({super.key});
+class Home extends StatefulWidget {
+  final String? userName;
+
+  const Home({super.key, this.userName});
+
+  @override
+  State<Home> createState() => _HomeState();
+}
+
+class _HomeState extends State<Home> {
+  final db = FirebaseFirestore.instance;
+  String userName = '';
+  bool isLoadingName = true;
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.userName != null && widget.userName!.isNotEmpty) {
+      userName = widget.userName!;
+      isLoadingName = false;
+    } else {
+      loadUserName();
+    }
+  }
+
+  Future<void> loadUserName() async {
+    try {
+      final uid = FirebaseAuth.instance.currentUser?.uid;
+      if (uid == null) {
+        setState(() {
+          userName = 'Guest';
+          isLoadingName = false;
+        });
+        return;
+      }
+
+      final doc = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(uid)
+          .get();
+
+      if (doc.exists && doc.data()?['name'] != null) {
+        setState(() {
+          userName = doc.data()!['name'];
+          isLoadingName = false;
+        });
+      } else {
+        setState(() {
+          userName = 'Guest';
+          isLoadingName = false;
+        });
+      }
+    } catch (e) {
+      debugPrint('Firestore Error: $e');
+      setState(() {
+        userName = 'Guest';
+        isLoadingName = false;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -15,32 +75,47 @@ class Home extends StatelessWidget {
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text("Nafi3", style: TextStyle(color: AppColors.primaryColor)),
-
-            Icon(Icons.notifications_outlined, color: AppColors.primaryColor),
+            Text(
+              'Nafi3',
+              style: TextStyle(color: AppColors.primaryColor),
+            ),
+            Icon(
+              Icons.notifications_outlined,
+              color: AppColors.primaryColor,
+            ),
           ],
         ),
       ),
-
       body: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(16.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                "Hello, Sarah!",
-                style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
-              ),
-              Text("What would you like to find today? "),
+              isLoadingName
+                  ? const SizedBox(
+                      height: 30,
+                      child: CircularProgressIndicator(strokeWidth: 2),
+                    )
+                  : Text(
+                      'Hello, $userName!',
+                      style: const TextStyle(
+                        fontSize: 25,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+              const Text('What would you like to find today? '),
               const SizedBox(height: 20),
               TextField(
                 decoration: InputDecoration(
-                  hintText: "Search for Donaton...",
-                  prefixIcon: Icon(Icons.search),
-                  suffixIcon: Icon(Icons.tune, color: AppColors.primaryColor),
+                  hintText: 'Search for Donaton...',
+                  prefixIcon: const Icon(Icons.search),
+                  suffixIcon: Icon(
+                    Icons.tune,
+                    color: AppColors.primaryColor,
+                  ),
                   filled: true,
-                  fillColor: Color(0xffF5F5F5),
+                  fillColor: const Color(0xffF5F5F5),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(15),
                     borderSide: BorderSide.none,
@@ -50,13 +125,16 @@ class Home extends StatelessWidget {
               const SizedBox(height: 20),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
+                children: const [
                   Text(
-                    "Categories",
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+                    'Categories',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20,
+                    ),
                   ),
                   Text(
-                    "View All",
+                    'View All',
                     style: TextStyle(
                       color: AppColors.primaryColor,
                       fontSize: 14,
@@ -70,12 +148,12 @@ class Home extends StatelessWidget {
                 child: ListView(
                   scrollDirection: Axis.horizontal,
                   children: [
-                    categoryCard("Food", Icons.restaurant),
-                    categoryCard("Clothes", Icons.checkroom),
-                    categoryCard("Medicine", Icons.medical_services),
-                    categoryCard("Books", Icons.menu_book),
+                    categoryCard('Food', Icons.restaurant),
+                    categoryCard('Clothes', Icons.checkroom),
+                    categoryCard('Medicine', Icons.medical_services),
+                    categoryCard('Books', Icons.menu_book),
                     categoryCard(
-                      "Skills",
+                      'Skills',
                       Icons.psychology_outlined,
                       isNew: true,
                     ),
@@ -85,13 +163,16 @@ class Home extends StatelessWidget {
               const SizedBox(height: 20),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
+                children: const [
                   Text(
-                    "Recent Donations",
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+                    'Recent Donations',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20,
+                    ),
                   ),
                   Text(
-                    "View All",
+                    'View All',
                     style: TextStyle(
                       color: AppColors.primaryColor,
                       fontSize: 14,
@@ -101,23 +182,23 @@ class Home extends StatelessWidget {
               ),
               const SizedBox(height: 20),
               recentCard(
-                "Food",
-                "Organic Vegetable Box",
-                "2.5 km away",
+                'Food',
+                'Organic Vegetable Box',
+                '2.5 km away',
                 AppAssets.vegetables,
               ),
               const SizedBox(height: 20),
               recentCard(
-                "Clothes",
-                "Winter Jackets (Kids)",
-                "0.8 km away",
+                'Clothes',
+                'Winter Jackets (Kids)',
+                '0.8 km away',
                 AppAssets.toy,
               ),
               const SizedBox(height: 20),
               recentCard(
-                "Books",
-                "Educational Books Set",
-                "1.2 km away",
+                'Books',
+                'Educational Books Set',
+                '1.2 km away',
                 AppAssets.books,
               ),
               const SizedBox(height: 20),
@@ -132,23 +213,32 @@ class Home extends StatelessWidget {
 
 ////////////////////////////////wedgets////////////////////////
 
-Widget recentCard(String category, String title, String distance, String img) {
+Widget recentCard(
+  String category,
+  String title,
+  String distance,
+  String img,
+) {
   return Card(
     elevation: 3,
     color: Colors.white,
-    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(20),
+    ),
     child: Padding(
       padding: const EdgeInsets.all(12),
       child: Row(
         children: [
-          // Image
           ClipRRect(
             borderRadius: BorderRadius.circular(15),
-            child: Image.asset(img, width: 100, height: 100, fit: BoxFit.cover),
+            child: Image.asset(
+              img,
+              width: 100,
+              height: 100,
+              fit: BoxFit.cover,
+            ),
           ),
-
           const SizedBox(width: 15),
-
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -180,17 +270,22 @@ Widget recentCard(String category, String title, String distance, String img) {
                     const SizedBox(width: 4),
                     Text(
                       distance,
-                      style: const TextStyle(color: Colors.grey, fontSize: 15),
+                      style: const TextStyle(
+                        color: Colors.grey,
+                        fontSize: 15,
+                      ),
                     ),
                   ],
                 ),
               ],
             ),
           ),
-
           const Align(
             alignment: Alignment.topCenter,
-            child: Icon(Icons.favorite_border, color: Colors.grey),
+            child: Icon(
+              Icons.favorite_border,
+              color: Colors.grey,
+            ),
           ),
         ],
       ),
@@ -212,9 +307,12 @@ Widget categoryCard(String title, IconData icon, {bool isNew = false}) {
                 color: const Color(0xffE8F4E6),
                 borderRadius: BorderRadius.circular(20),
               ),
-              child: Icon(icon, color: AppColors.primaryColor, size: 40),
+              child: Icon(
+                icon,
+                color: AppColors.primaryColor,
+                size: 40,
+              ),
             ),
-
             if (isNew)
               Positioned(
                 top: 6,
@@ -229,7 +327,7 @@ Widget categoryCard(String title, IconData icon, {bool isNew = false}) {
                     borderRadius: BorderRadius.circular(10),
                   ),
                   child: const Text(
-                    "NEW",
+                    'NEW',
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 10,
