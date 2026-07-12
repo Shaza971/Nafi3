@@ -59,10 +59,10 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.backgroundColor,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
 
       appBar: AppBar(
-        backgroundColor: AppColors.backgroundColor,
+        backgroundColor: Theme.of(context).appBarTheme.backgroundColor,
         elevation: 0,
         title: Text(
           "Nafi3",
@@ -75,7 +75,7 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
         actions: [
           Padding(
             padding: EdgeInsets.only(right: 15),
-            child: Icon(Icons.more_vert, color: AppColors.primaryColor),
+            child: Icon(Icons.more_vert,color: Theme.of(context).iconTheme.color,),
           ),
         ],
       ),
@@ -92,9 +92,9 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
 
             const SizedBox(height: 10),
 
-            const Text(
+            Text(
               "Keep your favorite donation requests in one place.\nSupport the causes you care about anytime.",
-              style: TextStyle(fontSize: 17, color: Colors.black54),
+              style: TextStyle(fontSize: 17, color: Theme.of(context).textTheme.bodyLarge?.color),
             ),
 
             SizedBox(height: 30),
@@ -118,7 +118,7 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
           return Container(
             margin: EdgeInsets.only(bottom: 22),
             decoration: BoxDecoration(
-              color: Colors.white,
+             color: Theme.of(context).cardColor,
               borderRadius: BorderRadius.circular(18),
               boxShadow: [
                 BoxShadow(color: Colors.grey.shade300, blurRadius: 8),
@@ -166,7 +166,7 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
                           vertical: 7,
                         ),
                         decoration: BoxDecoration(
-                          color: Colors.green.shade100,
+                          color: Theme.of(context).cardColor,
                           borderRadius: BorderRadius.circular(20),
                         ),
                         child: Text(
@@ -195,9 +195,9 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
 
                       Text(
                         donation["description"],
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontSize: 16,
-                          color: Colors.black54,
+                          color: Theme.of(context).textTheme.bodyLarge?.color,
                         ),
                       ),
 

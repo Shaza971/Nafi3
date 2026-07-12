@@ -80,9 +80,9 @@ class _AddDonationScreenState extends State<AddDonationScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-    backgroundColor:AppColors.backgroundColor,
+    backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
-     backgroundColor:AppColors.backgroundColor,
+     backgroundColor:Theme.of(context).appBarTheme.backgroundColor,
         title: Text(
           'Nafi3',
           style: TextStyle(

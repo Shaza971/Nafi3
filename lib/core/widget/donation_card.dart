@@ -12,16 +12,16 @@ class DonationCard extends StatelessWidget {
         vertical: 10,
       ),
       child: Card(
-        color: Colors.white,
+        color: Theme.of(context).cardColor,
         child: Container(
           width: double.infinity,
           padding: const EdgeInsets.all(20),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Icon(
+              Icon(
                 Icons.volunteer_activism,
-                color: Color(0xff1B5E20),
+               color: Theme.of(context).iconTheme.color,
                 size: 32,
               ),
 

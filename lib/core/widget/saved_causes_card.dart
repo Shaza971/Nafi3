@@ -11,16 +11,16 @@ class SavedCausesCard extends StatelessWidget {
         vertical: 10,
       ),
       child: Card(
-        color: Colors.white,
+        color: Theme.of(context).cardColor,
         child: Container(
           width: double.infinity,
           padding: const EdgeInsets.all(20),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Icon(
+              Icon(
                 Icons.bookmark_added,
-                color: Color(0xff1B5E20),
+              color: Theme.of(context).iconTheme.color,
                 size: 28,
               ),
 
@@ -72,14 +72,17 @@ class SavedCausesCard extends StatelessWidget {
                 child: Stack(
                   children: [
                     buildAvatar(
+                      context,
                       0,
                       'https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?w=100',
                     ),
                     buildAvatar(
+                      context,
                       1,
                       'https://images.unsplash.com/photo-1431540015161-0bf868a2d407?w=100',
                     ),
                     buildAvatar(
+                      context,
                       2,
                       'https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?w=100',
                     ),
@@ -90,7 +93,7 @@ class SavedCausesCard extends StatelessWidget {
                         width: 36,
                         height: 36,
                         decoration: BoxDecoration(
-                          color: Colors.grey,
+                         color: Theme.of(context).cardColor,
                           shape: BoxShape.circle,
                           border: Border.all(
                             color: Colors.white,
@@ -128,14 +131,14 @@ class SavedCausesCard extends StatelessWidget {
     );
   }
 
-  Widget buildAvatar(int index, String imageUrl) {
+  Widget buildAvatar(BuildContext context, int index, String imageUrl) {
     return Positioned(
       left: index * 25.0,
       child: Container(
         decoration: BoxDecoration(
           shape: BoxShape.circle,
           border: Border.all(
-            color: Colors.white,
+            color: Theme.of(context).cardColor,
             width: 2,
           ),
         ),
