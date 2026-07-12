@@ -47,7 +47,7 @@ class CustomTextField extends StatelessWidget {
             suffixIcon: suffixIcon,
 
             filled: true,
-            fillColor: Colors.white,
+            fillColor: Theme.of(context).inputDecorationTheme.fillColor,
 
             contentPadding:
                 const EdgeInsets.symmetric(vertical: 18),

@@ -1,11 +1,12 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:nafi3_project/core/utils/app_assets.dart';
 import 'package:nafi3_project/core/utils/app_colors.dart';
 import 'package:nafi3_project/core/widget/navbar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:nafi3_project/features/auth/data/firestore_repo.dart';
 import 'package:nafi3_project/features/home/ui/category_screen.dart';
 import 'package:nafi3_project/features/home/ui/donation_details_screen.dart';
+import 'package:nafi3_project/features/add_donation/data/donation_repo.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -16,6 +17,7 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   final FirestoreRepo firestoreRepo = FirestoreRepo();
+  final DonationRepo donationRepo = DonationRepo();
 
   String userName = "";
 
@@ -42,9 +44,9 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.backgroundColor,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
-        backgroundColor:AppColors.backgroundColor,
+        backgroundColor: Theme.of(context).appBarTheme.backgroundColor,
         title:
           Row(
              mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -76,7 +78,7 @@ class _HomeState extends State<Home> {
                   prefixIcon: Icon(Icons.search),
                   suffixIcon: Icon(Icons.tune,color: AppColors.primaryColor,),
                   filled: true,
-                  fillColor: Color(0xffF5F5F5),
+                 fillColor: Theme.of(context).inputDecorationTheme.fillColor,
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(15),
                     borderSide: BorderSide.none,
@@ -127,13 +129,47 @@ class _HomeState extends State<Home> {
                   ),)
                 ],
               ),
-              const SizedBox(height: 20,),
-              recentCard(context, "Food", "Organic Vegetable Box", "2.5 km away", AppAssets.vegetables),
-              const SizedBox(height: 20,),
-              recentCard(context, "Clothes", "Winter Jackets (Kids)", "0.8 km away", AppAssets.toy),
-              const SizedBox(height: 20,),
-              recentCard(context, "Books", "Educational Books Set", "1.2 km away", AppAssets.books),
-              const SizedBox(height: 20,),
+              StreamBuilder<QuerySnapshot>(
+  stream: donationRepo.getDonations(),
+  builder: (context, snapshot) {
+    if (snapshot.hasError) {
+      return const Center(child: Text("Something went wrong"));
+    }
+
+    if (snapshot.connectionState == ConnectionState.waiting) {
+      return const Center(child: CircularProgressIndicator());
+    }
+
+    final donations = snapshot.data!.docs;
+
+    if (donations.isEmpty) {
+      return const Center(
+        child: Text("No Donations Yet"),
+      );
+    }
+
+    return ListView.builder(
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
+      itemCount: donations.length,
+      itemBuilder: (context, index) {
+        final donation =
+            donations[index].data() as Map<String, dynamic>;
+
+        return Padding(
+          padding: const EdgeInsets.only(bottom: 15),
+          child: recentCard(
+            context,
+            donation["category"],
+            donation["title"],
+            donation["location"],
+            donation,
+          ),
+        );
+      },
+    );
+  },
+),
             ],
           ),
         ),
@@ -145,47 +181,49 @@ class _HomeState extends State<Home> {
 
 ////////////////////////////////wedgets////////////////////////
 
-Widget recentCard(  BuildContext context,
+Widget recentCard( 
+  BuildContext context,
   String category,
   String title,
-  String distance,
-  String img,
+  String location,
+  Map<String, dynamic> donation,
   ) 
 {
-  return GestureDetector(
-  onTap: () {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (_) => DonationDetailsScreen(
-          category: category,
-          title: title,
-          distance: distance,
-          image: img,
+  return InkWell(
+    onTap: () {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (_) => DonationDetailsScreen(
+            donation: donation,
+          ),
         ),
-      ),
-    );
-  },
-  child:Card(
-    elevation: 3,
-    color: Colors.white,
-    shape: RoundedRectangleBorder(
-      borderRadius: BorderRadius.circular(20),
-    ),
-    child: Padding(
+      );
+    },
+      child:Card(
+         elevation: 3,
+         color: Theme.of(context).cardColor,
+         shape: RoundedRectangleBorder(
+         borderRadius: BorderRadius.circular(20),
+        ),
+      child: Padding(
       padding: const EdgeInsets.all(12),
       child: Row(
         children: [
           // Image
-          ClipRRect(
-            borderRadius: BorderRadius.circular(15),
-            child: Image.asset(
-              img,
-              width: 100,
-              height: 100,
-              fit: BoxFit.cover,
-            ),
-          ),
+        Container(
+         width: 100,
+         height: 100,
+         decoration: BoxDecoration(
+         color: Theme.of(context).cardColor,
+         borderRadius: BorderRadius.circular(15),
+       ),
+       child: const Icon(
+         Icons.volunteer_activism,
+         color: Colors.green,
+         size: 40,
+       ),
+      ),
 
           const SizedBox(width: 15),
 
@@ -219,7 +257,7 @@ Widget recentCard(  BuildContext context,
                     ),
                     const SizedBox(width: 4),
                     Text(
-                      distance,
+                      location,
                       style: const TextStyle(
                         color: Colors.grey,
                         fontSize: 15,
@@ -267,7 +305,7 @@ Widget categoryCard(BuildContext context, String title,IconData icon, {bool isNe
                 width: 80,
                 height: 80,
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: Theme.of(context).cardColor,
                   borderRadius: BorderRadius.circular(18),
                   boxShadow: [
                     BoxShadow(

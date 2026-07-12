@@ -96,7 +96,7 @@ final TextEditingController confirmPasswordController =
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Theme.of(context).appBarTheme.backgroundColor,
       body: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -233,9 +233,9 @@ final TextEditingController confirmPasswordController =
                 child: GestureDetector(
                   onTap: () => Navigator.pop(context),
                   child: RichText(
-                    text: const TextSpan(
-                      style: TextStyle(color: Colors.black54, fontSize: 16),
-                      children: [
+                    text: TextSpan(
+                      style: TextStyle(color: Theme.of(context).textTheme.bodyLarge?.color, fontSize: 16),
+                      children: const [
                         TextSpan(text: 'Already have an account? '),
                         TextSpan(
                           text: 'Login',
@@ -305,9 +305,9 @@ final TextEditingController confirmPasswordController =
             
         Expanded(
           child: RichText(
-            text: const TextSpan(
-              style: TextStyle(color: Colors.black, fontSize: 14),
-              children: [
+            text: TextSpan(
+              style: TextStyle(color: Theme.of(context).textTheme.bodyLarge?.color, fontSize: 14),
+              children: const [
                 TextSpan(text: 'I agree to the '),
                 TextSpan(
                   text: 'Terms of Service',
