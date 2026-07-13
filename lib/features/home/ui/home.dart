@@ -47,15 +47,14 @@ class _HomeState extends State<Home> {
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
         backgroundColor: Theme.of(context).appBarTheme.backgroundColor,
-        title:
-          Row(
-             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text("Nafi3",style: TextStyle(color: AppColors.primaryColor),),
+            Text("Nafi3", style: TextStyle(color: AppColors.primaryColor)),
 
-           Icon(Icons.notifications_outlined,color: AppColors.primaryColor,)
-              ],
-              ),
+            Icon(Icons.notifications_outlined, color: AppColors.primaryColor),
+          ],
+        ),
       ),
 
       body: SafeArea(
@@ -64,226 +63,229 @@ class _HomeState extends State<Home> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text("Hello, $userName 👋",
-                style: TextStyle(
-                  fontSize: 25,
-                  fontWeight: FontWeight.bold,
-                ),
+              Text(
+                "Hello, $userName 👋",
+                style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
               ),
               Text("What would you like to find today? "),
-              const SizedBox(height: 20,),
+              const SizedBox(height: 20),
               TextField(
                 decoration: InputDecoration(
                   hintText: "Search for Donaton...",
                   prefixIcon: Icon(Icons.search),
-                  suffixIcon: Icon(Icons.tune,color: AppColors.primaryColor,),
+                  suffixIcon: Icon(Icons.tune, color: AppColors.primaryColor),
                   filled: true,
-                 fillColor: Theme.of(context).inputDecorationTheme.fillColor,
+                  fillColor: Theme.of(context).inputDecorationTheme.fillColor,
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(15),
                     borderSide: BorderSide.none,
                   ),
                 ),
               ),
-              const SizedBox(height: 20,),
-               Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text("Categories",style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 20,
-                  ),
-                  ),
-                  Text("View All",style: TextStyle(
-                    color: AppColors.primaryColor,
-                    fontSize: 14,
-                  ),)
-                ],
-              ),
-               const SizedBox(height: 20,),
-              SizedBox(
-              height: 120,
-              child: ListView(
-              scrollDirection: Axis.horizontal,
-              children: [
-              categoryCard(context, "Food", Icons.restaurant),
-              categoryCard(context, "Clothes", Icons.checkroom),
-              categoryCard(context, "Medicine", Icons.medical_services),
-              categoryCard(context, "Books", Icons.menu_book),
-              categoryCard(context, "Skills", Icons.psychology_outlined, isNew: true),
-    ],
-  ),
-),
-              const SizedBox(height: 20,),
+              const SizedBox(height: 20),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text("Recent Donations",style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 20,
+                  Text(
+                    "Categories",
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
                   ),
+                  Text(
+                    "View All",
+                    style: TextStyle(
+                      color: AppColors.primaryColor,
+                      fontSize: 14,
+                    ),
                   ),
-                  Text("View All",style: TextStyle(
-                    color: AppColors.primaryColor,
-                    fontSize: 14,
-                  ),)
+                ],
+              ),
+              const SizedBox(height: 20),
+              SizedBox(
+                height: 120,
+                child: ListView(
+                  scrollDirection: Axis.horizontal,
+                  children: [
+                    categoryCard(context, "Money", Icons.monetization_on),
+
+                    categoryCard(context, "Food", Icons.restaurant),
+                    categoryCard(context, "Clothes", Icons.checkroom),
+                    categoryCard(context, "Medicine", Icons.medical_services),
+                    categoryCard(context, "Books", Icons.menu_book),
+                    categoryCard(
+                      context,
+                      "Skills",
+                      Icons.psychology_outlined,
+                      isNew: true,
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 20),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    "Recent Donations",
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+                  ),
+                  Text(
+                    "View All",
+                    style: TextStyle(
+                      color: AppColors.primaryColor,
+                      fontSize: 14,
+                    ),
+                  ),
                 ],
               ),
               StreamBuilder<QuerySnapshot>(
-  stream: donationRepo.getDonations(),
-  builder: (context, snapshot) {
-    if (snapshot.hasError) {
-      return const Center(child: Text("Something went wrong"));
-    }
+                stream: donationRepo.getDonations(),
+                builder: (context, snapshot) {
+                  if (snapshot.hasError) {
+                    return const Center(child: Text("Something went wrong"));
+                  }
 
-    if (snapshot.connectionState == ConnectionState.waiting) {
-      return const Center(child: CircularProgressIndicator());
-    }
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const Center(child: CircularProgressIndicator());
+                  }
 
-    final donations = snapshot.data!.docs;
+                  final donations = snapshot.data!.docs;
 
-    if (donations.isEmpty) {
-      return const Center(
-        child: Text("No Donations Yet"),
-      );
-    }
+                  if (donations.isEmpty) {
+                    return const Center(child: Text("No Donations Yet"));
+                  }
 
-    return ListView.builder(
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
-      itemCount: donations.length,
-      itemBuilder: (context, index) {
-        final donation =
-            donations[index].data() as Map<String, dynamic>;
+                  return ListView.builder(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemCount: donations.length,
+                    itemBuilder: (context, index) {
+                      final donation =
+                          donations[index].data() as Map<String, dynamic>;
 
-        return Padding(
-          padding: const EdgeInsets.only(bottom: 15),
-          child: recentCard(
-            context,
-            donation["category"],
-            donation["title"],
-            donation["location"],
-            donation,
-          ),
-        );
-      },
-    );
-  },
-),
+                      return Padding(
+                        padding: const EdgeInsets.only(bottom: 15),
+                        child: recentCard(
+                          context,
+                          donation["category"],
+                          donation["title"],
+                          donation["location"],
+                          donation,
+                        ),
+                      );
+                    },
+                  );
+                },
+              ),
             ],
           ),
         ),
       ),
-      bottomNavigationBar: const Navbar( currentIndex: 0),
+      bottomNavigationBar: const Navbar(currentIndex: 0),
     );
   }
 }
 
 ////////////////////////////////wedgets////////////////////////
 
-Widget recentCard( 
+Widget recentCard(
   BuildContext context,
   String category,
   String title,
   String location,
   Map<String, dynamic> donation,
-  ) 
-{
+) {
   return InkWell(
     onTap: () {
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (_) => DonationDetailsScreen(
-            donation: donation,
-          ),
+          builder: (_) => DonationDetailsScreen(donation: donation),
         ),
       );
     },
-      child:Card(
-         elevation: 3,
-         color: Theme.of(context).cardColor,
-         shape: RoundedRectangleBorder(
-         borderRadius: BorderRadius.circular(20),
-        ),
+    child: Card(
+      elevation: 3,
+      color: Theme.of(context).cardColor,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
       child: Padding(
-      padding: const EdgeInsets.all(12),
-      child: Row(
-        children: [
-          // Image
-        Container(
-         width: 100,
-         height: 100,
-         decoration: BoxDecoration(
-         color: Theme.of(context).cardColor,
-         borderRadius: BorderRadius.circular(15),
-       ),
-       child: const Icon(
-         Icons.volunteer_activism,
-         color: Colors.green,
-         size: 40,
-       ),
-      ),
+        padding: const EdgeInsets.all(12),
+        child: Row(
+          children: [
+            // Image
+            Container(
+              width: 100,
+              height: 100,
+              decoration: BoxDecoration(
+                color: Theme.of(context).cardColor,
+                borderRadius: BorderRadius.circular(15),
+              ),
+              child: const Icon(
+                Icons.volunteer_activism,
+                color: Colors.green,
+                size: 40,
+              ),
+            ),
 
-          const SizedBox(width: 15),
+            const SizedBox(width: 15),
 
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  category.toUpperCase(),
-                  style: const TextStyle(
-                    color: Colors.green,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 13,
-                  ),
-                ),
-                const SizedBox(height: 8),
-                Text(
-                  title,
-                  style: const TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                const SizedBox(height: 8),
-                Row(
-                  children: [
-                    const Icon(
-                      Icons.location_on_outlined,
-                      size: 18,
-                      color: Colors.grey,
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    category.toUpperCase(),
+                    style: const TextStyle(
+                      color: Colors.green,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 13,
                     ),
-                    const SizedBox(width: 4),
-                    Text(
-                      location,
-                      style: const TextStyle(
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    title,
+                    style: const TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  Row(
+                    children: [
+                      const Icon(
+                        Icons.location_on_outlined,
+                        size: 18,
                         color: Colors.grey,
-                        fontSize: 15,
                       ),
-                    ),
-                  ],
-                ),
-              ],
+                      const SizedBox(width: 4),
+                      Text(
+                        location,
+                        style: const TextStyle(
+                          color: Colors.grey,
+                          fontSize: 15,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
-          ),
-          const Align(
-            alignment: Alignment.topCenter,
-            child: Icon(
-              Icons.favorite_border,
-              color: Colors.grey,
+            const Align(
+              alignment: Alignment.topCenter,
+              child: Icon(Icons.favorite_border, color: Colors.grey),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     ),
-  ),
   );
 }
 
-Widget categoryCard(BuildContext context, String title,IconData icon, {bool isNew = false,})
- {
+Widget categoryCard(
+  BuildContext context,
+  String title,
+  IconData icon, {
+  bool isNew = false,
+}) {
   return Padding(
     padding: const EdgeInsets.only(right: 16),
     child: Column(
@@ -295,9 +297,8 @@ Widget categoryCard(BuildContext context, String title,IconData icon, {bool isNe
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => CategoryScreen(
-                      category: title,
-                    ) as Widget,
+                    builder: (context) =>
+                        CategoryScreen(category: title) as Widget,
                   ),
                 );
               },
@@ -316,11 +317,7 @@ Widget categoryCard(BuildContext context, String title,IconData icon, {bool isNe
                   ],
                 ),
                 child: Center(
-                  child: Icon(
-                    icon,
-                    size: 36,
-                    color: AppColors.primaryColor,
-                  ),
+                  child: Icon(icon, size: 36, color: AppColors.primaryColor),
                 ),
               ),
             ),
