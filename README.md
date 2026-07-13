@@ -1,54 +1,68 @@
+````md
 ![Flutter](https://img.shields.io/badge/Flutter-3.x-blue?logo=flutter)
 ![Dart](https://img.shields.io/badge/Dart-3.x-0175C2?logo=dart)
 ![Firebase](https://img.shields.io/badge/Firebase-Enabled-FFCA28?logo=firebase)
 ![License](https://img.shields.io/badge/License-Educational-green)
-# 🤝 Community Hub - Donation Mobile Application
 
-Community Hub is a Flutter mobile application that helps people donate useful items to others in their local community.
+# 🤝 Nafi3 - Community Donation Platform
 
-The app provides a simple way to share food, clothes, books, medicine, and skills, making donations easier and reducing waste.
+Nafi3 is a Flutter application that connects donors with people in need through a simple, modern, and user-friendly platform. The app makes it easy to share useful items within the community, helping reduce waste and encourage social responsibility.
+
+---
+
+## 🌐 Live Demo
+
+**Firebase Hosting:**  
+https://nafi3-fa1e5.web.app
 
 ---
 
 ## ✨ Features
 
-- 🔐 User Authentication (Login & Register)
-- 📸 Upload donation images
-- 📝 Create new donations
+- 🚀 Onboarding screens for first-time users
+- 🔐 User Authentication (Sign Up, Login & Logout)
+- 🏠 Browse donation posts in real time
+- ➕ Create new donation posts
+- 🖼️ Upload donation images
+- 📂 Organize donations by category
+- 📍 Add donation location
 - ❤️ Save donations to Favorites
-- 🔍 Search donations
-- 📍 Add pickup location
-- 📋 View donation details
-- 👤 User profile
-- ☁️ Cloud-based data storage with Firebase
+- 👤 User Profile
+- ☁️ Cloud Firestore integration
+- 🌍 Flutter Web deployment using Firebase Hosting
 
 ---
 
 ## 📱 Screens
 
+- Splash Screen
+- Onboarding
 - Login
+- Register
 - Home
-- Donation Details
 - Add Donation
 - Favorites
 - Profile
 
 ---
 
-## 🛠️ Built With
+## 🛠️ Technologies Used
 
 - Flutter
 - Dart
 - Firebase Authentication
 - Cloud Firestore
-- Firebase Storage
-- Material 3 Design
+- Cloudinary
+- Image Picker
+- Firebase Hosting
+- Material 3
+- Git & GitHub
 
 ---
 
 ## 📂 Project Structure
 
-```
+```text
 lib/
 │
 ├── core/
@@ -57,97 +71,104 @@ lib/
 │   └── utils/
 │
 ├── features/
-│   ├── authentication/
+│   ├── auth/
 │   ├── home/
 │   ├── add_donation/
-│   ├── donation_details/
 │   ├── favorites/
-│   └── profile/
+│   ├── profile/
+│   ├── onboarding/
+│   └── model/
 │
 ├── widgets/
 │
 └── main.dart
-```
+````
 
 ---
 
-## 🚀 How to Run
+## 🚀 Getting Started
 
-1. Clone the repository
-
-```bash
-git clone https://github.com/your-username/community_hub.git
-```
-
-2. Open the project
+### 1. Clone the repository
 
 ```bash
-cd community_hub
+git clone https://github.com/YOUR_USERNAME/Nafi3.git
 ```
 
-3. Install dependencies
+### 2. Install dependencies
 
 ```bash
 flutter pub get
 ```
 
-4. Configure Firebase
+### 3. Configure Firebase
 
-- Create a Firebase project.
-- Enable Authentication.
-- Enable Cloud Firestore.
-- Enable Firebase Storage.
-- Add the Firebase configuration files.
+* Create a Firebase project.
+* Enable Firebase Authentication.
+* Enable Cloud Firestore.
+* Generate `firebase_options.dart` using FlutterFire CLI.
 
-5. Run the application
+### 4. Configure Cloudinary
+
+* Create an upload preset.
+* Add your Cloudinary Cloud Name and Upload Preset.
+
+### 5. Run the project
 
 ```bash
 flutter run
 ```
 
+For Web:
+
+```bash
+flutter run -d chrome
+```
+
 ---
 
-## 📸 App Preview
+## 📸 Application Preview
 
-> Screenshots will be added soon.
+Application screenshots:
 
-```
-Login
-Home
-Donation Details
-Add Donation
-Favorites
-Profile
-```
+* Splash Screen
+* Onboarding
+* Login
+* Register
+* Home
+* Add Donation
+* Favorites
+* Profile
 
 ---
 
 ## 🎯 Future Improvements
 
-- Chat between donor and receiver
-- Push Notifications
-- Google Maps integration
-- Donation request system
-- Dark Mode
-- Admin Dashboard
-- Donation history
-- Filtering and sorting
-- User ratings
+* 🔔 Push Notifications
+* 💬 Chat between donors and receivers
+* 🗺️ Google Maps integration
+* 🔍 Advanced search & filtering
+* 🌙 Dark Mode
+* 📊 Admin Dashboard
+* 📜 Donation History
+* ⭐ User Ratings & Reviews
 
 ---
 
 ## 💡 Project Goal
 
-Community Hub aims to encourage people to donate useful items instead of throwing them away, helping communities support each other while reducing waste.
+Nafi3 aims to make donating easier by providing a digital platform where users can share useful items with their local community. The project promotes sustainability, reduces waste, and strengthens community support.
 
 ---
 
 ## 👩‍💻 Team
 
-Developed as a Flutter Bootcamp Project.
+This project was developed as part of the **NTI Flutter Training Program** using Git & GitHub for team collaboration.
 
 ---
 
 ## 📄 License
 
-This project is for educational purposes.
+This project is intended for educational purposes.
+
+```
+```
