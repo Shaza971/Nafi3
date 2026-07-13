@@ -1,26 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:nafi3_project/core/utils/app_colors.dart';
 
 class DonationDetailsScreen extends StatelessWidget {
-  final String category;
-  final String title;
-  final String distance;
-  final String image;
+  final Map<String, dynamic> donation;
 
   const DonationDetailsScreen({
     super.key,
-    required this.category,
-    required this.title,
-    required this.distance,
-    required this.image,
+    required this.donation,
   });
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.backgroundColor,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
-        backgroundColor: AppColors.backgroundColor,
+        backgroundColor: Theme.of(context).appBarTheme.backgroundColor,
         title: const Text("Donation Details"),
       ),
       body: Padding(
@@ -28,20 +21,24 @@ class DonationDetailsScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            ClipRRect(
-              borderRadius: BorderRadius.circular(20),
-              child: Image.asset(
-                image,
-                width: double.infinity,
-                height: 220,
-                fit: BoxFit.cover,
+            Container(
+              width: double.infinity,
+              height: 220,
+              decoration: BoxDecoration(
+                color: Theme.of(context).cardColor,
+                borderRadius: BorderRadius.circular(20),
+              ),
+              child: const Icon(
+                Icons.volunteer_activism,
+                size: 80,
+                color: Colors.green,
               ),
             ),
 
             const SizedBox(height: 20),
 
             Text(
-              category,
+              donation["category"],
               style: const TextStyle(
                 color: Colors.green,
                 fontWeight: FontWeight.bold,
@@ -51,7 +48,7 @@ class DonationDetailsScreen extends StatelessWidget {
             const SizedBox(height: 10),
 
             Text(
-              title,
+              donation["title"],
               style: const TextStyle(
                 fontSize: 26,
                 fontWeight: FontWeight.bold,
@@ -64,7 +61,9 @@ class DonationDetailsScreen extends StatelessWidget {
               children: [
                 const Icon(Icons.location_on_outlined),
                 const SizedBox(width: 5),
-                Text(distance),
+                Expanded(
+                  child: Text(donation["location"]),
+                ),
               ],
             ),
 
@@ -80,8 +79,8 @@ class DonationDetailsScreen extends StatelessWidget {
 
             const SizedBox(height: 10),
 
-            const Text(
-              "This donation is available for anyone in need. Please contact the donor to arrange pickup.",
+            Text(
+              donation["description"],
             ),
           ],
         ),

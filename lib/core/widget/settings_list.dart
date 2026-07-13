@@ -20,76 +20,81 @@ class SettingsList extends StatelessWidget {
         vertical: 12,
       ),
       child: Card(
-        color: Colors.white,
+        color: Theme.of(context).cardColor,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(20),
         ),
         child: Column(
-          children: [
-            buildSettingsTile(
-  title: "Personal Information",
-  icon: Icons.person_outline,
-  onTap: () {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (_) => const PersonalInformationScreen(),
-      ),
-    );
-  },
-),
-
-            const Divider(height: 1),
-
-         buildSettingsTile(
-  title: "Donation History",
-  icon: Icons.history,
-  onTap: () {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (_) => const DonationHistoryScreen(),
-      ),
-    );
-  },
-),
-
-            const Divider(height: 1),
-
-          buildSettingsTile(
-  title: "Notification Settings",
-  icon: Icons.notifications_none,
-  onTap: () {
-   Navigator.push(
-  context,
-  MaterialPageRoute(
-    builder: (_) => const NotificationsScreen(),
+       children: [
+  buildSettingsTile(
+    context,
+    title: "Personal Information",
+    icon: Icons.person_outline,
+    onTap: () {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (_) => const PersonalInformationScreen(),
+        ),
+      );
+    },
   ),
-);
-  },
-),
 
-            const Divider(height: 1),
+  const Divider(height: 1),
 
-        buildSettingsTile(
-  title: "Security & Privacy",
-  icon: Icons.lock_outline,
-  onTap: () {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (_) => const SecurityPrivacyScreen(),
-      ),
-    );
-  },
-),
-          ],
+  buildSettingsTile(
+    context,
+    title: "Donation History",
+    icon: Icons.history,
+    onTap: () {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (_) => const DonationHistoryScreen(),
+        ),
+      );
+    },
+  ),
+
+  const Divider(height: 1),
+
+  buildSettingsTile(
+    context,
+    title: "Notification Settings",
+    icon: Icons.notifications_none,
+    onTap: () {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (_) => const NotificationsScreen(),
+        ),
+      );
+    },
+  ),
+
+  const Divider(height: 1),
+
+  buildSettingsTile(
+    context,
+    title: "Security & Privacy",
+    icon: Icons.lock_outline,
+    onTap: () {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (_) => const SecurityPrivacyScreen(),
+        ),
+      );
+    },
+  ),
+],
         ),
       ),
     );
   }
 
-  Widget buildSettingsTile({
+  Widget buildSettingsTile(
+    BuildContext context, {
     required String title,
     required IconData icon,
     VoidCallback? onTap,
@@ -103,7 +108,7 @@ class SettingsList extends StatelessWidget {
         width: 45,
         height: 45,
         decoration: BoxDecoration(
-          color: const Color(0xffE8F5E9),
+          color: Theme.of(context).cardColor,
           borderRadius: BorderRadius.circular(12),
         ),
         child: Icon(

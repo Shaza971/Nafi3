@@ -1,7 +1,5 @@
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:nafi3_project/core/utils/app_colors.dart';
 import 'package:nafi3_project/core/widget/donation_card.dart';
 import 'package:nafi3_project/core/widget/navbar.dart';
 import 'package:nafi3_project/core/widget/saved_causes_card.dart';
@@ -9,6 +7,8 @@ import 'package:nafi3_project/core/widget/settings_list.dart';
 import 'package:nafi3_project/features/auth/data/auth_repo.dart';
 import 'package:nafi3_project/features/auth/ui/login.dart';
 import 'package:nafi3_project/features/auth/data/firestore_repo.dart';
+import 'package:nafi3_project/main.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -21,6 +21,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   final AuthRepo authRepo = AuthRepo();
   final FirestoreRepo firestoreRepo = FirestoreRepo();
 
+  bool isDark = false;
   String userName = "";
   String email = "";
 
@@ -28,6 +29,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   void initState() {
     super.initState();
     getUserData();
+    loadTheme();
   }
 
   Future<void> getUserData() async {
@@ -49,12 +51,20 @@ class _ProfileScreenState extends State<ProfileScreen> {
     }
   }
 
+  Future<void> loadTheme() async {
+  final prefs = await SharedPreferences.getInstance();
+
+  setState(() {
+    isDark = prefs.getBool("darkMode") ?? false;
+  });
+}
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.backgroundColor,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
-        backgroundColor: AppColors.backgroundColor,
+        backgroundColor: Theme.of(context).appBarTheme.backgroundColor,
         leading: const Icon(
           Icons.arrow_back,
           color: Colors.black,
@@ -72,11 +82,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
         child: SingleChildScrollView(
           child: Column(
             children: [
+             
               profileHeader( userName,  email),
                const DonationCard(),
             const SizedBox(height:12),
              const SavedCausesCard(),
              const SizedBox(height:12),
+              themeButton(),
               const SettingsList(),  
                 const SizedBox(height:12),
               logoutButton(context),
@@ -91,6 +103,38 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
 ////////////////////////widgets//////////////////////
   
+Widget themeButton() {
+  return Container(
+    margin: const EdgeInsets.fromLTRB(20, 20, 20, 10),
+    padding: const EdgeInsets.symmetric(horizontal: 10),
+    decoration: BoxDecoration(
+      color: Theme.of(context).cardColor,
+      borderRadius: BorderRadius.circular(16),
+    ),
+    child: SwitchListTile(
+      contentPadding: EdgeInsets.zero,
+      secondary: const Icon(
+        Icons.dark_mode,
+        color: Colors.black,
+      ),
+      title: const Text(
+        "Dark Mode",
+        style: TextStyle(
+          fontWeight: FontWeight.w600,
+        ),
+      ),
+      value: isDark,
+      onChanged: (value) {
+        setState(() {
+          isDark = value;
+        });
+
+        MyApp.of(context)?.changeTheme(value);
+      },
+    ),
+  );
+}
+
 Widget profileHeader(String name, String email) {
   return Padding(
     padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
@@ -99,11 +143,12 @@ Widget profileHeader(String name, String email) {
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        const CircleAvatar(
+        CircleAvatar(
           radius: 50,
           child: Icon(
             Icons.person,
             size: 50,
+            color: Theme.of(context).iconTheme.color,
           ),
         ),
 
@@ -181,7 +226,7 @@ Widget logoutButton(BuildContext context) {
         vertical: 16,
       ),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: Theme.of(context).cardColor,
         borderRadius: BorderRadius.circular(16),
       ),
       child: const Row(
@@ -206,6 +251,5 @@ Widget logoutButton(BuildContext context) {
     );
 }
 
- 
-  }
+}
 

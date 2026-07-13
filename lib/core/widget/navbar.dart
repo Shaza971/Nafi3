@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:nafi3_project/core/utils/app_colors.dart';
 import 'package:nafi3_project/features/add_donation/ui/add_donation_screen.dart';
 import 'package:nafi3_project/features/favorits/ui/favorit.dart';
 import 'package:nafi3_project/features/home/ui/home.dart';
@@ -15,9 +14,10 @@ class Navbar extends StatelessWidget {
     return BottomNavigationBar(
       currentIndex: currentIndex,
       type: BottomNavigationBarType.fixed,
-      backgroundColor: Colors.white,
-      selectedItemColor: AppColors.primaryColor,
-      unselectedItemColor: Colors.grey,
+     backgroundColor: Theme.of(context).bottomNavigationBarTheme.backgroundColor,
+
+    selectedItemColor: Theme.of(context).bottomNavigationBarTheme.selectedItemColor,
+     unselectedItemColor: Theme.of(context).bottomNavigationBarTheme.unselectedItemColor,
       showSelectedLabels: true,
       showUnselectedLabels: true,
 

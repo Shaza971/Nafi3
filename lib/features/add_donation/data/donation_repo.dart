@@ -26,4 +26,10 @@ class DonationRepo {
       .where("category", isEqualTo: category)
       .snapshots();
 }
+
+Stream<QuerySnapshot> getDonations() {
+  return FirebaseFirestore.instance
+      .collection("donations")
+      .snapshots();
+}
 }

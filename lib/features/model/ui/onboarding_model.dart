@@ -108,7 +108,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                           height: MediaQuery.of(context).size.height * 0.38,
                           width: double.infinity,
                           decoration: BoxDecoration(
-                            color: Colors.white,
+                            color: Theme.of(context).cardColor,
                             borderRadius: BorderRadius.circular(30),
                           ),
                           child: ClipRRect(
