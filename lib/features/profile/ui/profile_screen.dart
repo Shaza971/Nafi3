@@ -200,20 +200,14 @@ Widget profileHeader(String name, String email) {
 
 Widget logoutButton(BuildContext context) {
   return GestureDetector(
-    onTap: () async {
-      final authRepo = AuthRepo();
-
-      await authRepo.signOut();
-
+    behavior: HitTestBehavior.opaque,
+    onTap: () {
       Navigator.pushAndRemoveUntil(
-        //تفتح صفحة جديدة.
-        //تمسح كل الصفحات القديمة.
-        // ignore: use_build_context_synchronously
         context,
         MaterialPageRoute(
           builder: (_) => const LoginScreen(),
         ),
-        (route) => false, //حذف كل الصفحات السابقة
+        (route) => false,
       );
     },
     child: Container(
@@ -232,10 +226,7 @@ Widget logoutButton(BuildContext context) {
       child: const Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(
-            Icons.logout,
-            color: Colors.red,
-          ),
+          Icon(Icons.logout, color: Colors.red),
           SizedBox(width: 8),
           Text(
             "Logout",
@@ -245,10 +236,10 @@ Widget logoutButton(BuildContext context) {
               fontWeight: FontWeight.w600,
             ),
           ),
-          ],
-        ),
+        ],
       ),
-    );
+    ),
+  );
 }
 
 }

@@ -1,40 +1,45 @@
 {
   "project_info": {
-<<<<<<< HEAD
-    "project_number": "31891669250",
-    "project_id": "nafi3-fa1e5",
-    "storage_bucket": "nafi3-fa1e5.firebasestorage.app"
-=======
     "project_number": "814660781162",
+    "firebase_url": "https://nafi3-9805b-default-rtdb.firebaseio.com",
     "project_id": "nafi3-9805b",
     "storage_bucket": "nafi3-9805b.firebasestorage.app"
->>>>>>> origin/main
   },
   "client": [
     {
       "client_info": {
-<<<<<<< HEAD
-        "mobilesdk_app_id": "1:31891669250:android:19c808f3c02d8ab756821b",
-=======
         "mobilesdk_app_id": "1:814660781162:android:d29785693971391a67f613",
->>>>>>> origin/main
         "android_client_info": {
           "package_name": "com.example.nafi3_project"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "814660781162-m7rhg53sbnrriugd9l7rknq6q747832s.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.nafi3_project",
+            "certificate_hash": "f23e16d81b3756fe2e2eb6684901ab15c92a45f8"
+          }
+        },
+        {
+          "client_id": "814660781162-h0v42hb8kr0a4jo6u799mj1tf4c59vqo.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
-<<<<<<< HEAD
-          "current_key": "AIzaSyBVKZQK210JU8Sfgv8KFBBVE68ORcyas9I"
-=======
           "current_key": "AIzaSyB2iH92S_B-iSK_T_aHDSRIF4xSrEgEOSs"
->>>>>>> origin/main
         }
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "814660781162-h0v42hb8kr0a4jo6u799mj1tf4c59vqo.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }
