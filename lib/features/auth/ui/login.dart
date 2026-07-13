@@ -43,6 +43,13 @@ Future<void> signIn() async {
       ),
     );
   } on FirebaseAuthException catch (e) {
+    //إذا حدث خطأ من Firebase.
+
+// مثل:
+// كلمة السر خطأ
+// المستخدم غير موجود
+// البريد الإلكتروني غير صالح
+
     // ignore: use_build_context_synchronously
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
@@ -52,8 +59,10 @@ Future<void> signIn() async {
   }
 }
 
-  bool obscure = true;
+  bool obscure = true;   
+  //هذا المتغير مسئول عن إظهار وإخفاء كلمة السر.
   bool isLoading = false;
+  //هذا المتغير يستخدم لإظهار مؤشر تحميل.....
 
 
   @override
