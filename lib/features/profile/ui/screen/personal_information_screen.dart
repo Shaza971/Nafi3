@@ -11,9 +11,7 @@ class PersonalInformationScreen extends StatefulWidget {
       _PersonalInformationScreenState();
 }
 
-class _PersonalInformationScreenState
-    extends State<PersonalInformationScreen> {
-
+class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
   final FirestoreRepo firestoreRepo = FirestoreRepo();
   final User? user = FirebaseAuth.instance.currentUser;
 
@@ -24,111 +22,92 @@ class _PersonalInformationScreenState
         title: const Text("Personal Information"),
         backgroundColor: Colors.green,
       ),
-
       body: FutureBuilder<DocumentSnapshot>(
         future: firestoreRepo.getUser(user!.uid),
-
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
+            return const Center(child: CircularProgressIndicator());
           }
 
           if (!snapshot.hasData || !snapshot.data!.exists) {
-            return const Center(
-              child: Text("No user data found"),
-            );
+            return const Center(child: Text("No user data found"));
           }
 
-          final data =
-              snapshot.data!.data() as Map<String, dynamic>;
+          final data = snapshot.data!.data() as Map<String, dynamic>;
 
-          return Padding(
-            padding: const EdgeInsets.all(20),
-            child: Card(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(20),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.all(20),
-                child: Column(
-                  children: [
-                    const CircleAvatar(
-                      radius: 45,
-                      child: Icon(Icons.person, size: 40),
-                    ),
+          return SafeArea(
+            // 1. أضفنا SingleChildScrollView هنا لتسهيل سكرول الصفحة كلها
+            child: SingleChildScrollView(
+              physics:
+                  const BouncingScrollPhysics(), // بيعطي حركة سكرول سلسة ومريحة
+              padding: const EdgeInsets.all(20),
+              child: Card(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(20),
+                  child: Column(
+                    mainAxisSize:
+                        MainAxisSize.min, // يخلي العمود يأخذ مساحة العناصر فقط
+                    children: [
+                      const CircleAvatar(
+                        radius: 45,
+                        child: Icon(Icons.person, size: 40),
+                      ),
+                      const SizedBox(height: 20),
 
-                    const SizedBox(height: 20),
+                      ListTile(
+                        leading: const Icon(Icons.person_outline),
+                        title: const Text("Full Name"),
+                        subtitle: Text(data["name"] ?? "Not provided"),
+                      ),
+                      const Divider(),
 
-                   ListTile(
-  leading: const Icon(Icons.person_outline),
-  title: const Text("Full Name"),
-  subtitle: Text(data["name"] ?? "Not provided"),
-),
+                      ListTile(
+                        leading: const Icon(Icons.email_outlined),
+                        title: const Text("Email"),
+                        subtitle: Text(data["email"] ?? "Not provided"),
+                      ),
+                      const Divider(),
 
-const Divider(),
+                      ListTile(
+                        leading: const Icon(Icons.phone),
+                        title: const Text("Phone Number"),
+                        subtitle: Text(
+                          data["phone"] ?? "01012345678",
+                        ), // يفضل تسحبيها من الفايربيز لو متاحة
+                      ),
+                      const Divider(),
 
-ListTile(
-  leading: const Icon(Icons.email_outlined),
-  title: const Text("Email"),
-  subtitle: Text(data["email"] ?? "Not provided"),
-),
+                      ListTile(
+                        leading: const Icon(Icons.cake),
+                        title: const Text("Date of Birth"),
+                        subtitle: Text(data["dob"] ?? "20/08/2006"),
+                      ),
+                      const Divider(),
 
+                      ListTile(
+                        leading: const Icon(Icons.person),
+                        title: const Text("Gender"),
+                        subtitle: Text(data["gender"] ?? "Female"),
+                      ),
+                      const Divider(),
 
+                      ListTile(
+                        leading: const Icon(Icons.location_on),
+                        title: const Text("City"),
+                        subtitle: Text(data["city"] ?? "Minya"),
+                      ),
+                      const Divider(),
 
-
-const Divider(),
-
-ListTile(
-  leading: const Icon(Icons.phone),
-  title: const Text("Phone Number"),
-  subtitle: const Text("01012345678"),
-),
-
-const Divider(),
-
-ListTile(
-  leading: const Icon(Icons.cake),
-  title: const Text("Date of Birth"),
-  subtitle: const Text("20/08/2006"),
-),
-
-const Divider(),
-
-ListTile(
-  leading: const Icon(Icons.person),
-  title: const Text("Gender"),
-  subtitle: const Text("Female"),
-),
-
-const Divider(),
-
-ListTile(
-  leading: const Icon(Icons.location_on),
-  title: const Text("City"),
-  subtitle: const Text("Minya"),
-),
-
-const Divider(),
-
-ListTile(
-  leading: const Icon(Icons.favorite),
-  title: const Text("Favorite Cause"),
-  subtitle: const Text("Education"),
-),
-                    //   const Divider(),
-
-                    // ListTile(
-                    //   leading: const Icon(Icons.email_outlined),
-                    //   title: const Text("Password"),
-                    //   subtitle: Text(data["password"] ?? ""),
-                    // ),
-                    
-
-                  ],
-
-                  
+                      ListTile(
+                        leading: const Icon(Icons.favorite),
+                        title: const Text("Favorite Cause"),
+                        subtitle: Text(data["favoriteCause"] ?? "Education"),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
@@ -137,8 +116,4 @@ ListTile(
       ),
     );
   }
-
-
-
 }
-

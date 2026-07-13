@@ -13,76 +13,69 @@ class AddDonationScreen extends StatefulWidget {
 
 class _AddDonationScreenState extends State<AddDonationScreen> {
   final TextEditingController titleController = TextEditingController();
-  final TextEditingController descriptionController =
-    TextEditingController();
-  final TextEditingController locationController =
-    TextEditingController();
+  final TextEditingController descriptionController = TextEditingController();
+  final TextEditingController locationController = TextEditingController();
   final DonationRepo donationRepo = DonationRepo();
 
   Future<void> publishDonation() async {
-  if (titleController.text.trim().isEmpty ||
-      descriptionController.text.trim().isEmpty ||
-      locationController.text.trim().isEmpty ||
-      selectedCategory == null) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text("Please fill all fields"),
-      ),
-    );
-    return;
-  }
-
-  try {
-    final user = FirebaseAuth.instance.currentUser;
-
-    if (user == null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text("Please login first"),
-        ),
-      );
+    if (titleController.text.trim().isEmpty ||
+        descriptionController.text.trim().isEmpty ||
+        locationController.text.trim().isEmpty ||
+        selectedCategory == null) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text("Please fill all fields")));
       return;
     }
 
-    await donationRepo.addDonation(
-      title: titleController.text.trim(),
-      category: selectedCategory!,
-      description: descriptionController.text.trim(),
-      location: locationController.text.trim(),
-      userId: user.uid,
-    );
+    try {
+      final user = FirebaseAuth.instance.currentUser;
 
-    // ignore: use_build_context_synchronously
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text("Donation published successfully 🎉"),
-        backgroundColor: Colors.green,
-      ),
-    );
+      if (user == null) {
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(const SnackBar(content: Text("Please login first")));
+        return;
+      }
 
-    titleController.clear();
-    descriptionController.clear();
-    locationController.clear();
+      await donationRepo.addDonation(
+        title: titleController.text.trim(),
+        category: selectedCategory!,
+        description: descriptionController.text.trim(),
+        location: locationController.text.trim(),
+        userId: user.uid,
+      );
 
-    setState(() {
-      selectedCategory = null;
-    });
-  } catch (e) {
-    // ignore: use_build_context_synchronously
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(e.toString()),
-      ),
-    );
+      // ignore: use_build_context_synchronously
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text("Donation published successfully 🎉"),
+          backgroundColor: Colors.green,
+        ),
+      );
+
+      titleController.clear();
+      descriptionController.clear();
+      locationController.clear();
+
+      setState(() {
+        selectedCategory = null;
+      });
+    } catch (e) {
+      // ignore: use_build_context_synchronously
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(e.toString())));
+    }
   }
-}
-    String? selectedCategory;
+
+  String? selectedCategory;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-    backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
-     backgroundColor:Theme.of(context).appBarTheme.backgroundColor,
+        backgroundColor: Theme.of(context).appBarTheme.backgroundColor,
         title: Text(
           'Nafi3',
           style: TextStyle(
@@ -158,7 +151,7 @@ class _AddDonationScreenState extends State<AddDonationScreen> {
         ),
       ),
 
-      bottomNavigationBar: const Navbar( currentIndex: 1,),
+      bottomNavigationBar: const Navbar(currentIndex: 1),
     );
   }
 
@@ -195,9 +188,9 @@ class _AddDonationScreenState extends State<AddDonationScreen> {
 
   ElevatedButton appelevatedbutton() {
     return ElevatedButton(
-     onPressed: () async {
-     await publishDonation();
-     },
+      onPressed: () async {
+        await publishDonation();
+      },
       style: ElevatedButton.styleFrom(
         backgroundColor: AppColors.darkgreen,
         foregroundColor: Colors.white,
@@ -242,6 +235,7 @@ class _AddDonationScreenState extends State<AddDonationScreen> {
         ),
       ),
       items: const [
+        DropdownMenuItem(value: "Money", child: Text("Money")),
         DropdownMenuItem(value: "Clothes", child: Text("Clothes")),
         DropdownMenuItem(value: "Food", child: Text("Food")),
         DropdownMenuItem(value: "Books", child: Text("Books")),
@@ -251,12 +245,12 @@ class _AddDonationScreenState extends State<AddDonationScreen> {
       initialValue: selectedCategory,
 
       onChanged: (value) {
-      setState(() {
-      selectedCategory = value;
-     });
-  },
+        setState(() {
+          selectedCategory = value;
+        });
+      },
     );
-}
+  }
 
   TextFormField appdescription() {
     return TextFormField(
@@ -282,7 +276,7 @@ class _AddDonationScreenState extends State<AddDonationScreen> {
 
   TextFormField applocationfield() {
     return TextFormField(
-        controller: locationController,
+      controller: locationController,
       decoration: InputDecoration(
         prefixIcon: Icon(Icons.location_on_outlined),
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(30)),
