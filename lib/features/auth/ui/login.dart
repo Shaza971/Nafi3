@@ -59,6 +59,31 @@ Future<void> signIn() async {
   }
 }
 
+
+
+
+
+ Future<void> googleLogin() async {
+    try {
+      final user = await authRepo.signInWithGoogle();
+
+      if (user != null) {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (_) => Home(),
+          ),
+        );
+      }
+    } on FirebaseAuthException catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(e.message ?? "Google Login Failed"),
+        ),
+      );
+    }
+  }
+
   bool obscure = true;   
   //هذا المتغير مسئول عن إظهار وإخفاء كلمة السر.
   bool isLoading = false;
@@ -237,17 +262,26 @@ Future<void> signIn() async {
                 ],
               ),
               const SizedBox(height: 35),
-              Row(
-                children: [
-                  Expanded(
-                    child: socialButton(FontAwesomeIcons.google, 'Google'),
-                  ),
-                  const SizedBox(width: 20),
-                  Expanded(
-                    child: socialButton(FontAwesomeIcons.apple, 'Apple'),
-                  ),
-                ],
-              ),
+          Row(
+  children: [
+    Expanded(
+      child: socialButton(
+        FontAwesomeIcons.google,
+        'Google',
+        onTap: () async {
+          await googleLogin();
+        },
+      ),
+    ),
+    const SizedBox(width: 20),
+    Expanded(
+      child: socialButton(
+        FontAwesomeIcons.apple,
+        'Apple',
+      ),
+    ),
+  ],
+),
              
               const SizedBox(height: 40),
               OutlinedButton(
@@ -303,8 +337,16 @@ Future<void> signIn() async {
     );
   }
 
-  Widget socialButton(FaIconData icon, String text) {
-    return Container(
+
+  Widget socialButton(
+  FaIconData icon,
+  String text, {
+  VoidCallback? onTap,
+}) {
+  return InkWell(
+    onTap: onTap,
+    borderRadius: BorderRadius.circular(35),
+    child: Container(
       height: 58,
       decoration: BoxDecoration(
         border: Border.all(color: Colors.grey.shade300),
@@ -315,9 +357,37 @@ Future<void> signIn() async {
         children: [
           FaIcon(icon, size: 20),
           const SizedBox(width: 10),
-          Text(text, style: const TextStyle(fontSize: 18)),
+          Text(
+            text,
+            style: const TextStyle(fontSize: 18),
+          ),
         ],
       ),
-    );
-  }
+    ),
+  );
+}
+
+
+
+
+
+
+
+  // Widget socialButton(FaIconData icon, String text) {
+  //   return Container(
+  //     height: 58,
+  //     decoration: BoxDecoration(
+  //       border: Border.all(color: Colors.grey.shade300),
+  //       borderRadius: BorderRadius.circular(35),
+  //     ),
+  //     child: Row(
+  //       mainAxisAlignment: MainAxisAlignment.center,
+  //       children: [
+  //         FaIcon(icon, size: 20),
+  //         const SizedBox(width: 10),
+  //         Text(text, style: const TextStyle(fontSize: 18)),
+  //       ],
+  //     ),
+  //   );
+  // }
 }
