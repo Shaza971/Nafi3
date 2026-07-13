@@ -1,4 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:nafi3_project/features/profile/ui/screen/donation_history_screen.dart';
+import 'package:nafi3_project/features/profile/ui/screen/notification_settings_screen.dart';
+import 'package:nafi3_project/features/profile/ui/screen/personal_information_screen.dart';
+import 'package:nafi3_project/features/profile/ui/screen/security_privacy_screen.dart';
+
+// import 'package:nafi3_project/features/profile/screen/personal_information_screen.dart';
+// import 'package:nafi3_project/features/profile/screen/donation_history_screen.dart';
+
+// import 'package:nafi3_project/features/profile/screen/security_privacy_screen.dart';
 
 class SettingsList extends StatelessWidget {
   const SettingsList({super.key});
@@ -18,34 +27,62 @@ class SettingsList extends StatelessWidget {
         child: Column(
           children: [
             buildSettingsTile(
-              title: "Personal Information",
-              icon: Icons.person_outline,
-              onTap: () {},
-            ),
+  title: "Personal Information",
+  icon: Icons.person_outline,
+  onTap: () {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (_) => const PersonalInformationScreen(),
+      ),
+    );
+  },
+),
 
             const Divider(height: 1),
 
-            buildSettingsTile(
-              title: "Donation History",
-              icon: Icons.history,
-              onTap: () {},
-            ),
+         buildSettingsTile(
+  title: "Donation History",
+  icon: Icons.history,
+  onTap: () {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (_) => const DonationHistoryScreen(),
+      ),
+    );
+  },
+),
 
             const Divider(height: 1),
 
-            buildSettingsTile(
-              title: "Notification Settings",
-              icon: Icons.notifications_none,
-              onTap: () {},
-            ),
+          buildSettingsTile(
+  title: "Notification Settings",
+  icon: Icons.notifications_none,
+  onTap: () {
+   Navigator.push(
+  context,
+  MaterialPageRoute(
+    builder: (_) => const NotificationsScreen(),
+  ),
+);
+  },
+),
 
             const Divider(height: 1),
 
-            buildSettingsTile(
-              title: "Security & Privacy",
-              icon: Icons.lock_outline,
-              onTap: () {},
-            ),
+        buildSettingsTile(
+  title: "Security & Privacy",
+  icon: Icons.lock_outline,
+  onTap: () {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (_) => const SecurityPrivacyScreen(),
+      ),
+    );
+  },
+),
           ],
         ),
       ),

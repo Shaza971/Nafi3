@@ -32,15 +32,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   Future<void> getUserData() async {
     final user = FirebaseAuth.instance.currentUser;
+    // بيجيب المستخدم اللي جاب ال login
 
     if (user == null) return;
+    // بنتاكد ازي في مستخدم اصلا
 
     email = user.email ?? "";
 
     final doc = await firestoreRepo.getUser(user.uid);
+    //قراءة بيانات المستخدم من Firestore
 
     if (doc.exists) {
-      setState(() {
+      setState(() {  //بحدث الشاشه  ال
         userName = doc["name"];
       });
     }
@@ -158,12 +161,14 @@ Widget logoutButton(BuildContext context) {
       await authRepo.signOut();
 
       Navigator.pushAndRemoveUntil(
+        //تفتح صفحة جديدة.
+        //تمسح كل الصفحات القديمة.
         // ignore: use_build_context_synchronously
         context,
         MaterialPageRoute(
           builder: (_) => const LoginScreen(),
         ),
-        (route) => false,
+        (route) => false, //حذف كل الصفحات السابقة
       );
     },
     child: Container(
